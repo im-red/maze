@@ -25,10 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    unionfind.cpp \
+    mazewidget.cpp \
+    mazedata.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    unionfind.h \
+    mazewidget.h \
+    mazedata.h
 
 FORMS += \
         mainwindow.ui
