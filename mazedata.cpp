@@ -1,8 +1,9 @@
 #include "mazedata.h"
 
 MazeData::MazeData(int row, int column)
-    :m_iRow(row),
+    : m_iRow(row),
       m_iColumn(column)
+
 {
     if (0 == row || 0 == column)
     {

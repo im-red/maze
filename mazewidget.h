@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QPaintEvent>
+#include <QPicture>
 
 class MazeWidget : public QWidget
 {
@@ -16,14 +17,17 @@ public:
 signals:
 
 public slots:
+    void save();
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
     MazeData m_data;
-    int m_spacing = 50;
-    int m_minSpacing = 10;
+    int m_iPicSpacing = 50;
+    int m_iSpacing = 50;
+    int m_iMinSpacing = 10;
+    QPicture m_picture;
 };
 
 #endif // MAZEWIDGET_H

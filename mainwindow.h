@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_okButton_clicked();
+    void on_saveButton_clicked();
     void generate(int row, int column);
 
 private:

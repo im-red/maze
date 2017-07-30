@@ -29,6 +29,11 @@ void MainWindow::on_okButton_clicked()
     generate(ui->rowSpinBox->value(), ui->colSpinBox->value());
 }
 
+void MainWindow::on_saveButton_clicked()
+{
+    ui->mazeWidget->save();
+}
+
 void MainWindow::generate(int row, int column)
 {
 
