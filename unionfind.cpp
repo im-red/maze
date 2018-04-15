@@ -1,10 +1,11 @@
 #include "unionfind.h"
 
 UnionFind::UnionFind(int n)
+    : m_count(n),
+      m_connection(0),
+      m_pid(new int[n]),
+      m_psize(new int[n])
 {
-    m_count = n;
-    m_pid = new int[n];
-    m_psize = new int[n];
     for (int i = 0; i < n; i++)
     {
         m_pid[i] = i;
@@ -36,6 +37,7 @@ void UnionFind::Union(int p, int q)
         m_pid[j] = i;
         m_psize[i] += m_psize[j];
     }
+    m_connection++;
 }
 
 int UnionFind::find(int p)

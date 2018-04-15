@@ -20,7 +20,8 @@ public:
 private slots:
     void on_okButton_clicked();
     void on_saveButton_clicked();
-    void generate(int row, int column);
+    void generateA(int row, int column);
+    void generateB(int row, int column);
 
 private:
     Ui::MainWindow *ui;

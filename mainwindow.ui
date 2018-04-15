@@ -41,6 +41,23 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QRadioButton" name="aRadioButton">
+        <property name="text">
+         <string>模式A</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="bRadioButton">
+        <property name="text">
+         <string>模式B</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label">
@@ -89,6 +106,9 @@
           </property>
           <property name="maximum">
            <number>999</number>
+          </property>
+          <property name="value">
+           <number>20</number>
           </property>
          </widget>
         </item>
@@ -146,6 +166,9 @@
           </property>
           <property name="maximum">
            <number>999</number>
+          </property>
+          <property name="value">
+           <number>20</number>
           </property>
          </widget>
         </item>
