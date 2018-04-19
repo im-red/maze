@@ -28,13 +28,17 @@ SOURCES += \
         mainwindow.cpp \
     unionfind.cpp \
     mazewidget.cpp \
-    mazedata.cpp
+    mazedata.cpp \
+    deepfirstsearch.cpp \
+    adjacencylist.cpp
 
 HEADERS += \
         mainwindow.h \
     unionfind.h \
     mazewidget.h \
-    mazedata.h
+    mazedata.h \
+    deepfirstsearch.h \
+    adjacencylist.h
 
 FORMS += \
         mainwindow.ui
