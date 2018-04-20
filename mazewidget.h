@@ -6,9 +6,9 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QPaintEvent>
-#include <QPicture>
 #include <QImage>
+
+class QResizeEvent;
 
 class MazeWidget : public QLabel
 {
@@ -22,12 +22,16 @@ public:
     explicit MazeWidget(QWidget *parent = nullptr);
     void setWall(MazeData &data);
     void setPath(AdjacencyList &list);
-    void setShowWhat(E_SHOW_WHAT what) { m_iShowWhat = what; }
+    void setShowWhat(int showWhat) { m_iShowWhat = showWhat; }
 
 signals:
 
 public slots:
     void save();
+    void refreshShowWhat(int showWhat);
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void adjustSpacing(int width, int height);
@@ -46,6 +50,7 @@ private:
 
     QImage m_wall;
     QImage m_path;
+    QImage m_show;
 };
 
 #endif // MAZEWIDGET_H

@@ -6,14 +6,16 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QFileDialog>
+#include <QResizeEvent>
 
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 
 MazeWidget::MazeWidget(QWidget *parent)
     : QLabel(parent)
-    , m_iShowWhat(E_WALL)
+    , m_iShowWhat(E_PATH)
     , m_wallData(0, 0)
 {
 
@@ -81,26 +83,11 @@ void MazeWidget::setPath(AdjacencyList &list)
     assert(width >= 2 && height >= 2);
 
     adjustSpacing(width, height);
-    QImage image = QImage(width * m_iSpacing + 1, height * m_iSpacing + 1, QImage::Format_ARGB32);
-    image.fill(Qt::transparent);
 
-    QPainter painter(&image);
-    painter.setCompositionMode(QPainter::CompositionMode_Plus);
+    generatePath();
+    generateWall();
 
-    if (m_iShowWhat & E_PATH)
-    {
-        generatePath();
-        painter.drawImage(0, 0, m_path);
-    }
-    painter.setCompositionMode(QPainter::CompositionMode_Plus);
-    if (m_iShowWhat & E_WALL)
-    {
-        generateWall();
-        painter.drawImage(0, 0, m_wall);
-    }
-
-    painter.end();
-    setPixmap(QPixmap::fromImage(image));
+    refreshShowWhat(m_iShowWhat);
 }
 
 void MazeWidget::save()
@@ -114,6 +101,48 @@ void MazeWidget::save()
     QPixmap pixmap(this->width() + 2 * m_iPicSpacing, this->height() + 2 * m_iPicSpacing);
     this->render(&pixmap, QPoint(m_iPicSpacing, m_iPicSpacing));
     pixmap.save(fileName, "png");
+}
+
+void MazeWidget::refreshShowWhat(int showWhat)
+{
+    m_iShowWhat = showWhat;
+
+    int width = m_pathData.m_iWidth;
+    int height = m_pathData.m_iHeight;
+
+    m_show = QImage(width * m_iSpacing + 1, height * m_iSpacing + 1, QImage::Format_ARGB32);
+    m_show.fill(Qt::white);
+
+    QPainter painter(&m_show);
+    painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+
+    if (m_iShowWhat & E_PATH)
+    {
+        painter.drawImage(0, 0, m_path);
+    }
+    painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+    if (m_iShowWhat & E_WALL)
+    {
+        painter.drawImage(0, 0, m_wall);
+    }
+
+    painter.end();
+    setPixmap(QPixmap::fromImage(m_show));
+}
+
+void MazeWidget::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event)
+
+    m_show.fill(Qt::white);
+
+    int width = m_pathData.m_iWidth;
+    int height = m_pathData.m_iHeight;
+    if (width != -1 && height != -1)
+    {
+        setPath(m_pathData);
+        refreshShowWhat(m_iShowWhat);
+    }
 }
 
 void MazeWidget::adjustSpacing(int width, int height)
@@ -147,11 +176,11 @@ void MazeWidget::generatePath()
         int x = i % width;
         int y = i / width;
 
-        if (m_pathData.m_vVertexes[i].count(y * width + x + 1) == 1)
+        if (count(m_pathData.m_vVertexes[i].begin(), m_pathData.m_vVertexes[i].end(), y * width + x + 1) == 1)
         {
             painter.drawLine((x + 0.5) * m_iSpacing, (y + 0.5) * m_iSpacing, (x + 1.5) * m_iSpacing, (y + 0.5) * m_iSpacing);
         }
-        if (m_pathData.m_vVertexes[i].count((y + 1) * width + x) == 1)
+        if (count(m_pathData.m_vVertexes[i].begin(), m_pathData.m_vVertexes[i].end(), (y + 1) * width + x) == 1)
         {
             painter.drawLine((x + 0.5) * m_iSpacing, (y + 0.5) * m_iSpacing, (x + 0.5) * m_iSpacing, (y + 1.5) * m_iSpacing);
         }
@@ -192,11 +221,11 @@ void MazeWidget::generateWall()
             painter.drawLine(x * m_iSpacing, 0, (x + 1) * m_iSpacing, 0);
         }
 
-        if (m_pathData.m_vVertexes[i].count(i + 1) == 0)
+        if (count(m_pathData.m_vVertexes[i].begin(), m_pathData.m_vVertexes[i].end(), i + 1) == 0)
         {
             painter.drawLine((x + 1) * m_iSpacing, y * m_iSpacing, (x + 1) * m_iSpacing, (y + 1) * m_iSpacing);
         }
-        if (m_pathData.m_vVertexes[i].count(i + width) == 0)
+        if (count(m_pathData.m_vVertexes[i].begin(), m_pathData.m_vVertexes[i].end(), i + width) == 0)
         {
             painter.drawLine(x * m_iSpacing, (y + 1) * m_iSpacing, (x + 1) * m_iSpacing, (y + 1) * m_iSpacing);
         }

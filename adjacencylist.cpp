@@ -15,7 +15,7 @@ void AdjacencyList::linkAllVertexes()
 {
     assert(m_iWidth > 1 && m_iHeight > 1);
 
-    m_vVertexes = vector<set<int>>(m_iWidth * m_iHeight);
+    m_vVertexes = vector<vector<int>>(m_iWidth * m_iHeight);
 
     generateAllLink();
     m_vVertexes = m_vVertexesAllLinked;
@@ -25,33 +25,33 @@ void AdjacencyList::unlinkAllVertexes()
 {
     assert(m_iWidth > 1 && m_iHeight > 1);
 
-    m_vVertexes = vector<set<int>>(m_iWidth * m_iHeight);
+    m_vVertexes = vector<vector<int>>(m_iWidth * m_iHeight);
 
     generateAllLink();
 }
 
 void AdjacencyList::generateAllLink()
 {
-    m_vVertexesAllLinked = vector<set<int>>(m_iWidth * m_iHeight);
+    m_vVertexesAllLinked = vector<vector<int>>(m_iWidth * m_iHeight);
 
     int size = m_iWidth * m_iHeight;
     for (int i = 0; i < size; i++)
     {
         if (!(isLeftTop(i) || isRightTop(i) || isTopEdge(i)))
         {
-            m_vVertexesAllLinked[i].insert(i - m_iWidth);
+            m_vVertexesAllLinked[i].push_back(i - m_iWidth);
         }
         if (!(isLeftBottom(i) || isRightBottom(i) || isBottomEdge(i)))
         {
-            m_vVertexesAllLinked[i].insert(i + m_iWidth);
+            m_vVertexesAllLinked[i].push_back(i + m_iWidth);
         }
         if (!(isLeftTop(i) || isLeftBottom(i) || isLeftEdge(i)))
         {
-            m_vVertexesAllLinked[i].insert(i - 1);
+            m_vVertexesAllLinked[i].push_back(i - 1);
         }
         if (!(isRightTop(i) || isRightBottom(i) || isRightEdge(i)))
         {
-            m_vVertexesAllLinked[i].insert(i + 1);
+            m_vVertexesAllLinked[i].push_back(i + 1);
         }
     }
 }
@@ -59,8 +59,8 @@ void AdjacencyList::generateAllLink()
 void AdjacencyList::connect(int i, int j)
 {
     assert(i >= 0 && i < m_iWidth * m_iHeight && j >= 0 && j < m_iWidth * m_iHeight);
-    m_vVertexes[i].insert(j);
-    m_vVertexes[j].insert(i);
+    m_vVertexes[i].push_back(j);
+    m_vVertexes[j].push_back(i);
 }
 
 bool AdjacencyList::isLeftTop(int index)

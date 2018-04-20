@@ -29,8 +29,8 @@ struct AdjacencyList
 
     int m_iWidth;
     int m_iHeight;
-    std::vector<std::set<int>> m_vVertexes;
-    std::vector<std::set<int>> m_vVertexesAllLinked;
+    std::vector<std::vector<int>> m_vVertexes;
+    std::vector<std::vector<int>> m_vVertexesAllLinked;
 };
 
 #endif // ADJACENCYLIST_H

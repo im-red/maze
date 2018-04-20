@@ -25,8 +25,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>274</width>
-         <height>223</height>
+         <width>268</width>
+         <height>211</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -40,23 +40,6 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QRadioButton" name="aRadioButton">
-        <property name="text">
-         <string>模式A</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="bRadioButton">
-        <property name="text">
-         <string>模式B</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -104,8 +87,11 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="minimum">
+           <number>2</number>
+          </property>
           <property name="maximum">
-           <number>999</number>
+           <number>200</number>
           </property>
           <property name="value">
            <number>20</number>
@@ -164,8 +150,11 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="minimum">
+           <number>2</number>
+          </property>
           <property name="maximum">
-           <number>999</number>
+           <number>200</number>
           </property>
           <property name="value">
            <number>20</number>
@@ -217,9 +206,24 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>显示内容</string>
+    </property>
+    <addaction name="actionWall"/>
+    <addaction name="actionPath"/>
+   </widget>
+   <widget class="QMenu" name="menuGen">
+    <property name="title">
+     <string>生成算法</string>
+    </property>
+    <addaction name="actionDFS"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menuGen"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -230,6 +234,42 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionWall">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>墙</string>
+   </property>
+   <property name="toolTip">
+    <string>墙</string>
+   </property>
+  </action>
+  <action name="actionPath">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>路径</string>
+   </property>
+   <property name="toolTip">
+    <string>路径</string>
+   </property>
+  </action>
+  <action name="actionDFS">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>DFS</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
