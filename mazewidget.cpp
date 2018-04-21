@@ -16,61 +16,9 @@ using namespace std;
 MazeWidget::MazeWidget(QWidget *parent)
     : QLabel(parent)
     , m_iShowWhat(E_PATH)
-    , m_wallData(0, 0)
+    , m_pathData(-1, -1)
 {
 
-}
-
-void MazeWidget::setWall(MazeData &data)
-{
-    m_wallData = data;
-
-    int row = m_wallData.m_iRow;
-    int column = m_wallData.m_iColumn;
-
-    assert(row >= 2 && column >= 2);
-
-    adjustSpacing(column, row);
-    m_wall = QImage(column * m_iSpacing + 1, row * m_iSpacing + 1, QImage::Format_ARGB32);
-
-    QPainter painter;
-    painter.begin(&m_wall);
-    painter.fillRect(0, 0, m_iSpacing * column, m_iSpacing * row, Qt::white);
-
-    QPen pen;
-    pen.setBrush(Qt::SolidPattern);
-    pen.setColor(Qt::black);
-    painter.setPen(pen);
-
-    for (int i = 0; i < 2 * row + 1; i++)
-    {
-        QBitArray a = m_wallData.m_vData.at(i);
-        if (i % 2 == 0)
-        {
-            for (int j = 0; j < column; j++)
-            {
-                if (a.at(j))
-                {
-                    painter.drawLine(j * m_iSpacing, (i / 2) * m_iSpacing, (j + 1) * m_iSpacing, (i / 2) * m_iSpacing);
-                }
-            }
-        }
-        else
-        {
-            for (int j = 0; j < column + 1; j++)
-            {
-                if (a.at(j))
-                {
-                    painter.drawLine(j * m_iSpacing, (i / 2) * m_iSpacing, j * m_iSpacing, (i / 2 + 1) * m_iSpacing);
-                }
-            }
-        }
-    }
-
-    painter.fillRect(1, 1, m_iSpacing - 3, m_iSpacing - 3, Qt::red);
-    painter.fillRect(m_iSpacing * (column - 1) + 3, m_iSpacing * (row - 1) + 3, m_iSpacing - 3, m_iSpacing - 3, Qt::green);
-    painter.end();
-    setPixmap(QPixmap::fromImage(m_wall));
 }
 
 void MazeWidget::setPath(AdjacencyList &list)

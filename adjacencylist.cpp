@@ -4,9 +4,9 @@
 
 using namespace std;
 
-AdjacencyList::AdjacencyList()
-    : m_iWidth(-1)
-    , m_iHeight(-1)
+AdjacencyList::AdjacencyList(int width, int height)
+    : m_iWidth(width)
+    , m_iHeight(height)
 {
 
 }

@@ -6,18 +6,18 @@
 
 struct AdjacencyList
 {
-    AdjacencyList();
+    AdjacencyList(int width, int height);
 
-    // 以连接相邻顶点重置邻接链表
+    // init list with all adjacent point linked
     void linkAllVertexes();
-    // 以不连接相邻顶点重置邻接链表
+    // init list with all adjacent point unlinked
     void unlinkAllVertexes();
 
     void generateAllLink();
 
     void connect(int i, int j);
 
-    // 判断顶点的位置
+    // check the position of point
     bool isLeftTop(int index);
     bool isRightTop(int index);
     bool isLeftBottom(int index);

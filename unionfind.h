@@ -1,23 +1,24 @@
 #ifndef UNIONFIND_H
 #define UNIONFIND_H
 
+#include <vector>
 
 class UnionFind
 {
 public:
     UnionFind(int n);
     ~UnionFind();
-    int Count() { return m_count; }
-    bool Connected(int p, int q) { return find(p) == find(q); }
-    void Union(int p, int q);
-    int Connection() { return m_connection; }
+    int pointNum() { return m_count; }
+    bool connected(int p, int q) { return root(p) == root(q); }
+    void connect(int p, int q);
+    int connectionNum() { return m_connection; }
 
 private:
-    int find(int p);
+    int root(int p);
 
 private:
-    int *m_pid;
-    int *m_psize;
+    std::vector<int> m_vPoints;
+    std::vector<int> m_vTreeSize;
     int m_count;
     int m_connection;
 };

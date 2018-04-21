@@ -1,9 +1,8 @@
-#include "unionfind.h"
-#include "mazedata.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "deepfirstsearch.h"
 #include "adjacencylist.h"
+#include "kruskal.h"
 
 #include <QVector>
 #include <QBitArray>
@@ -38,10 +37,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_okButton_clicked()
 {
+    int width = ui->widthSpinBox->value();
+    int height = ui->heightSpinBox->value();
+
+    AdjacencyList list(width, height);
+
     if (ui->actionDFS->isChecked())
     {
-        generateDFS(ui->rowSpinBox->value(), ui->colSpinBox->value());
+        DeepFirstSearch dfs(width, height);
+        list = dfs.generate();
     }
+    else if(ui->actionKruskal->isChecked())
+    {
+        Kruskal kruskal(width, height);
+        list = kruskal.generate();
+    }
+
+    ui->mazeWidget->setPath(list);
 }
 
 void MainWindow::on_saveButton_clicked()
@@ -68,8 +80,5 @@ void MainWindow::on_actionPath_toggled(bool checked)
 void MainWindow::generateDFS(int row, int column)
 {
 
-    DeepFirstSearch dfs(column, row);
-    AdjacencyList list = dfs.generate();
 
-    ui->mazeWidget->setPath(list);
 }

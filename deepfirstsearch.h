@@ -13,7 +13,6 @@ public:
         E_BLACK
     };
     DeepFirstSearch(int width, int height);
-    void setSize(int width, int height) { m_iWidth = width; m_iHeight = height; }
     AdjacencyList generate();
 
 private:

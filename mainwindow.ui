@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>迷宫生成器</string>
+   <string>Maze</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -25,7 +25,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>268</width>
+         <width>258</width>
          <height>211</height>
         </rect>
        </property>
@@ -41,9 +41,12 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="label_2">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -52,7 +55,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>
@@ -63,12 +66,12 @@
            </size>
           </property>
           <property name="text">
-           <string>行数</string>
+           <string>Width</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="rowSpinBox">
+         <widget class="QSpinBox" name="widthSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -101,12 +104,9 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="label_2">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
+         <widget class="QLabel" name="label">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -115,7 +115,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>
@@ -126,12 +126,12 @@
            </size>
           </property>
           <property name="text">
-           <string>列数</string>
+           <string>Height</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="colSpinBox">
+         <widget class="QSpinBox" name="heightSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -172,14 +172,14 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>确定</string>
+         <string>OK</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="saveButton">
         <property name="text">
-         <string>保存</string>
+         <string>Save</string>
         </property>
        </widget>
       </item>
@@ -211,16 +211,17 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>显示内容</string>
+     <string>Show</string>
     </property>
     <addaction name="actionWall"/>
     <addaction name="actionPath"/>
    </widget>
    <widget class="QMenu" name="menuGen">
     <property name="title">
-     <string>生成算法</string>
+     <string>Generation algorithm</string>
     </property>
     <addaction name="actionDFS"/>
+    <addaction name="actionKruskal"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuGen"/>
@@ -242,10 +243,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>墙</string>
+    <string>Wall</string>
    </property>
    <property name="toolTip">
-    <string>墙</string>
+    <string>Wall</string>
    </property>
   </action>
   <action name="actionPath">
@@ -253,10 +254,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>路径</string>
+    <string>Path</string>
    </property>
    <property name="toolTip">
-    <string>路径</string>
+    <string>Path</string>
    </property>
   </action>
   <action name="actionDFS">
@@ -268,6 +269,14 @@
    </property>
    <property name="text">
     <string>DFS</string>
+   </property>
+  </action>
+  <action name="actionKruskal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Kruskal</string>
    </property>
   </action>
  </widget>

@@ -14,9 +14,7 @@ DeepFirstSearch::DeepFirstSearch(int width, int height)
 
 AdjacencyList DeepFirstSearch::generate()
 {
-    AdjacencyList result;
-    result.m_iWidth = m_iWidth;
-    result.m_iHeight = m_iHeight;
+    AdjacencyList result(m_iWidth, m_iHeight);
     result.unlinkAllVertexes();
 
     vector<int> color(m_iWidth * m_iHeight, E_WHITE);
@@ -29,12 +27,11 @@ AdjacencyList DeepFirstSearch::generate()
     while(current.size() != 0)
     {
         int last = current.back();
-        vector<int> neighbor(result.m_vVertexesAllLinked[last].begin(), result.m_vVertexesAllLinked[last].end());
-        random_shuffle(neighbor.begin(), neighbor.end());
+        random_shuffle(result.m_vVertexesAllLinked[last].begin(), result.m_vVertexesAllLinked[last].end());
 
-        auto iter = neighbor.cbegin();
+        auto iter = result.m_vVertexesAllLinked[last].cbegin();
 
-        for (; iter != neighbor.cend(); iter++)
+        for (; iter != result.m_vVertexesAllLinked[last].cend(); iter++)
         {
             if (color[*iter] == E_WHITE)
             {
@@ -45,8 +42,8 @@ AdjacencyList DeepFirstSearch::generate()
             }
         }
 
-        // 所有相邻结点都被发现过
-        if (iter == neighbor.cend())
+        // all adjacent points are found
+        if (iter == result.m_vVertexesAllLinked[last].cend())
         {
             current.pop_back();
             color[last] = E_BLACK;

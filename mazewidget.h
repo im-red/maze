@@ -1,7 +1,6 @@
 #ifndef MAZEWIDGET_H
 #define MAZEWIDGET_H
 
-#include "mazedata.h"
 #include "adjacencylist.h"
 
 #include <QWidget>
@@ -20,7 +19,6 @@ public:
         E_WALL = 1 << 1
     };
     explicit MazeWidget(QWidget *parent = nullptr);
-    void setWall(MazeData &data);
     void setPath(AdjacencyList &list);
     void setShowWhat(int showWhat) { m_iShowWhat = showWhat; }
 
@@ -40,8 +38,6 @@ private:
 
 private:
     int m_iShowWhat;
-
-    MazeData m_wallData;
     AdjacencyList m_pathData;
 
     int m_iPicSpacing = 50;
