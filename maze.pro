@@ -30,7 +30,8 @@ SOURCES += \
     mazewidget.cpp \
     deepfirstsearch.cpp \
     adjacencylist.cpp \
-    kruskal.cpp
+    kruskal.cpp \
+    prim.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     mazewidget.h \
     deepfirstsearch.h \
     adjacencylist.h \
-    kruskal.h
+    kruskal.h \
+    prim.h
 
 FORMS += \
         mainwindow.ui

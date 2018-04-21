@@ -27,6 +27,9 @@ struct AdjacencyList
     bool isTopEdge(int index);
     bool isBottomEdge(int index);
 
+    // return the node num having 1/2/3/4 neighbors
+    static std::vector<int> neighborStat(AdjacencyList &list);
+
     int m_iWidth;
     int m_iHeight;
     std::vector<std::vector<int>> m_vVertexes;

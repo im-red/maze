@@ -126,3 +126,15 @@ bool AdjacencyList::isBottomEdge(int index)
     }
     return index > (m_iWidth * (m_iHeight - 1)) && index < (m_iHeight * m_iWidth - 1);
 }
+
+vector<int> AdjacencyList::neighborStat(AdjacencyList &list)
+{
+    assert(list.m_iWidth > 0 && list.m_iHeight > 0);
+    vector<int> result(4, 0);
+    for (int i = 0; i < list.m_iWidth * list.m_iHeight; i++)
+    {
+        assert(list.m_vVertexes[i].size() >= 1 && list.m_vVertexes[i].size() <= 4);
+        result[list.m_vVertexes[i].size() - 1]++;
+    }
+    return result;
+}

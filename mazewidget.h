@@ -19,7 +19,7 @@ public:
         E_WALL = 1 << 1
     };
     explicit MazeWidget(QWidget *parent = nullptr);
-    void setPath(AdjacencyList &list);
+    void setAdjList(AdjacencyList &list);
     void setShowWhat(int showWhat) { m_iShowWhat = showWhat; }
 
 signals:

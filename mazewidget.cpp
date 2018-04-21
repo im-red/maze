@@ -21,7 +21,7 @@ MazeWidget::MazeWidget(QWidget *parent)
 
 }
 
-void MazeWidget::setPath(AdjacencyList &list)
+void MazeWidget::setAdjList(AdjacencyList &list)
 {
     m_pathData = list;
 
@@ -88,7 +88,7 @@ void MazeWidget::resizeEvent(QResizeEvent *event)
     int height = m_pathData.m_iHeight;
     if (width != -1 && height != -1)
     {
-        setPath(m_pathData);
+        setAdjList(m_pathData);
         refreshShowWhat(m_iShowWhat);
     }
 }
