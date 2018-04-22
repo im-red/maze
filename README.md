@@ -14,6 +14,6 @@ They are all from https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 Maze solving algorithms include:
 
-
+1. Wall follower
 
 They are all from https://en.wikipedia.org/wiki/Maze_solving_algorithm

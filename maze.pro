@@ -32,7 +32,9 @@ SOURCES += \
     adjacencylist.cpp \
     kruskal.cpp \
     prim.cpp \
-    recursivedivision.cpp
+    recursivedivision.cpp \
+    solutionlist.cpp \
+    wallfollower.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +44,9 @@ HEADERS += \
     adjacencylist.h \
     kruskal.h \
     prim.h \
-    recursivedivision.h
+    recursivedivision.h \
+    solutionlist.h \
+    wallfollower.h
 
 FORMS += \
         mainwindow.ui
