@@ -31,7 +31,8 @@ SOURCES += \
     deepfirstsearch.cpp \
     adjacencylist.cpp \
     kruskal.cpp \
-    prim.cpp
+    prim.cpp \
+    recursivedivision.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     deepfirstsearch.h \
     adjacencylist.h \
     kruskal.h \
-    prim.h
+    prim.h \
+    recursivedivision.h
 
 FORMS += \
         mainwindow.ui

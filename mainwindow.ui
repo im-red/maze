@@ -28,7 +28,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>645</width>
+         <width>649</width>
          <height>489</height>
         </rect>
        </property>
@@ -218,7 +218,7 @@
            </size>
           </property>
           <property name="text">
-           <string>neighbor</string>
+           <string>degree</string>
           </property>
          </widget>
         </item>
@@ -353,6 +353,7 @@
     <addaction name="actionDFS"/>
     <addaction name="actionKruskal"/>
     <addaction name="actionPrim"/>
+    <addaction name="actionDiv"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuGen"/>
@@ -416,6 +417,14 @@
    </property>
    <property name="text">
     <string>Prim</string>
+   </property>
+  </action>
+  <action name="actionDiv">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Recursive division</string>
    </property>
   </action>
  </widget>

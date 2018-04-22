@@ -3,6 +3,7 @@
 #include "deepfirstsearch.h"
 #include "kruskal.h"
 #include "prim.h"
+#include "recursivedivision.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -66,6 +67,11 @@ void MainWindow::on_okButton_clicked()
     {
         Prim prim(width, height);
         m_adjList = prim.generate();
+    }
+    else if (ui->actionDiv->isChecked())
+    {
+        RecursiveDivision div(width, height);
+        m_adjList = div.generate();
     }
 
     vector<int> stat = AdjacencyList::neighborStat(m_adjList);

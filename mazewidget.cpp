@@ -58,6 +58,11 @@ void MazeWidget::refreshShowWhat(int showWhat)
     int width = m_pathData.m_iWidth;
     int height = m_pathData.m_iHeight;
 
+    if (width == -1 && height == -1)
+    {
+        return;
+    }
+
     m_show = QImage(width * m_iSpacing + 1, height * m_iSpacing + 1, QImage::Format_ARGB32);
     m_show.fill(Qt::white);
 

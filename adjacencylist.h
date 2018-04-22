@@ -16,6 +16,7 @@ struct AdjacencyList
     void generateAllLink();
 
     void connect(int i, int j);
+    void unconnect(int i, int j);
 
     // check the position of point
     bool isLeftTop(int index);

@@ -63,6 +63,13 @@ void AdjacencyList::connect(int i, int j)
     m_vVertexes[j].push_back(i);
 }
 
+void AdjacencyList::unconnect(int i, int j)
+{
+    assert(i >= 0 && i < m_iWidth * m_iHeight && j >= 0 && j < m_iWidth * m_iHeight);
+    m_vVertexes[i].erase(find(m_vVertexes[i].begin(), m_vVertexes[i].end(), j));
+    m_vVertexes[j].erase(find(m_vVertexes[j].begin(), m_vVertexes[j].end(), i));
+}
+
 bool AdjacencyList::isLeftTop(int index)
 {
     assert(index >= 0 && index < m_iWidth * m_iHeight);
