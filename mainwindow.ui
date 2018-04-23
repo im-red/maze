@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>878</width>
-    <height>578</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
          <x>0</x>
          <y>0</y>
          <width>645</width>
-         <height>489</height>
+         <height>503</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -43,6 +43,46 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Show</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="checkBoxWall">
+           <property name="text">
+            <string>Wall</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxPath">
+           <property name="text">
+            <string>Path</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxSolution">
+           <property name="text">
+            <string>Solution</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxAccessed">
+           <property name="text">
+            <string>Accessed</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -436,15 +476,6 @@
      <height>26</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Show</string>
-    </property>
-    <addaction name="actionWall"/>
-    <addaction name="actionPath"/>
-    <addaction name="actionSolution"/>
-    <addaction name="actionAccessed"/>
-   </widget>
    <widget class="QMenu" name="menuGen">
     <property name="title">
      <string>Generation algorithm</string>
@@ -461,7 +492,6 @@
     <addaction name="actionLeftHand"/>
     <addaction name="actionRightHand"/>
    </widget>
-   <addaction name="menu"/>
    <addaction name="menuGen"/>
    <addaction name="menuSolve"/>
   </widget>

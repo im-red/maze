@@ -77,6 +77,21 @@ void MazeWidget::refreshShowWhat(int showWhat)
     m_show.fill(Qt::white);
 
     QPainter painter(&m_show);
+
+    QPen pen;
+    pen.setBrush(Qt::SolidPattern);
+    pen.setColor(Qt::green);
+    pen.setWidth(3);
+    painter.setPen(pen);
+
+    painter.drawLine(0.5 * m_iSpacing, 0, 0.5 * m_iSpacing, m_iSpacing);
+    painter.drawLine(0.5 * m_iSpacing, m_iSpacing, 0, 0.5 * m_iSpacing);
+    painter.drawLine(0.5 * m_iSpacing, m_iSpacing, m_iSpacing, 0.5 * m_iSpacing);
+
+    painter.drawLine((0.5 + width - 1) * m_iSpacing, (height - 1) * m_iSpacing, (0.5 + width - 1) * m_iSpacing, height * m_iSpacing);
+    painter.drawLine((0.5 + width - 1) * m_iSpacing, height * m_iSpacing, (width - 1) * m_iSpacing, (0.5 + height - 1) * m_iSpacing);
+    painter.drawLine((0.5 + width - 1) * m_iSpacing, height * m_iSpacing, width * m_iSpacing, (0.5 + height - 1) * m_iSpacing);
+
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
 
     if (m_iShowWhat & E_PATH)

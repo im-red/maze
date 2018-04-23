@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_buttonSolve_clicked()
 {
     doSolve();
-    ui->actionSolution->setChecked(true);
+    ui->checkBoxSolution->setChecked(true);
 }
 
 void MainWindow::on_buttonGenerate_clicked()
@@ -73,7 +73,7 @@ void MainWindow::on_saveButton_clicked()
     ui->mazeWidget->save();
 }
 
-void MainWindow::on_actionWall_toggled(bool checked)
+void MainWindow::on_checkBoxWall_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
@@ -81,7 +81,7 @@ void MainWindow::on_actionWall_toggled(bool checked)
     ui->mazeWidget->refreshShowWhat(m_iShowWhat);
 }
 
-void MainWindow::on_actionPath_toggled(bool checked)
+void MainWindow::on_checkBoxPath_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
@@ -89,7 +89,7 @@ void MainWindow::on_actionPath_toggled(bool checked)
     ui->mazeWidget->refreshShowWhat(m_iShowWhat);
 }
 
-void MainWindow::on_actionSolution_toggled(bool checked)
+void MainWindow::on_checkBoxSolution_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
@@ -97,7 +97,7 @@ void MainWindow::on_actionSolution_toggled(bool checked)
     ui->mazeWidget->refreshShowWhat(m_iShowWhat);
 }
 
-void MainWindow::on_actionAccessed_toggled(bool checked)
+void MainWindow::on_checkBoxAccessed_toggled(bool checked)
 {
     Q_UNUSED(checked)
 

@@ -28,10 +28,10 @@ private slots:
     void on_buttonGenerate_clicked();
     void on_buttonSolve_clicked();
     void on_saveButton_clicked();
-    void on_actionWall_toggled(bool checked);
-    void on_actionPath_toggled(bool checked);
-    void on_actionSolution_toggled(bool checked);
-    void on_actionAccessed_toggled(bool checked);
+    void on_checkBoxWall_toggled(bool checked);
+    void on_checkBoxPath_toggled(bool checked);
+    void on_checkBoxSolution_toggled(bool checked);
+    void on_checkBoxAccessed_toggled(bool checked);
 
 
 private:
