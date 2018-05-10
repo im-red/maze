@@ -1,0 +1,136 @@
+#include "astar.h"
+#include "mutable_priority_queue.h"
+
+#include <queue>
+#include <set>
+#include <vector>
+#include <functional>
+#include <cmath>
+#include <cassert>
+#include <memory>
+#include <cstdio>
+
+using namespace std;
+
+AStar::AStar(E_HFUNC func)
+    : m_hType(func)
+{
+
+}
+
+SolutionList AStar::solve(AdjacencyList &adjList)
+{
+    const int width = adjList.m_iWidth;
+    const int height = adjList.m_iHeight;
+
+    function<int(int, int)> hFunc;
+    switch (m_hType)
+    {
+    case E_MANHATTAN:
+        hFunc = [&](int p, int q)
+        {
+            int x1 = p % width;
+            int y1 = p / width;
+            int x2 = q % width;
+            int y2 = q / width;
+
+            return abs(x1 - x2) + abs(y1 - y2);
+        };
+        break;
+    case E_EUCLIDIAN:
+        hFunc = [&](int p, int q)
+        {
+            int x1 = p % width;
+            int y1 = p / width;
+            int x2 = q % width;
+            int y2 = q / width;
+
+            printf("%d\n", static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))));
+
+            return static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
+        };
+        break;
+    case E_0:
+        hFunc = [](int p, int q) { (void)p; (void)q; return 0; };
+        break;
+    default:
+        assert(false);
+        break;
+    }
+
+    MutablePriorityQueue<AStarNode> openQueue([](const AStarNode &p, const AStarNode &q) { return p.m_iF < q.m_iF; });
+    set<int> closeSet;
+    set<int> openSet;
+
+    vector<int> parent(width * height, -1);
+    vector<MutablePriorityQueue<AStarNode>::handle_type> handleVector(width * height);
+
+    const int endIndex = width * height - 1;
+    const int beginIndex = 0;
+    AStarNode start(beginIndex);
+    handleVector[start.m_iId] = openQueue.push(start);
+    openSet.insert(start.m_iId);
+
+    SolutionList solution;
+
+    while (!openQueue.empty())
+    {
+        // pop the least F value node to process
+        AStarNode currentNode = openQueue.pop();
+        openSet.erase(openSet.find(currentNode.m_iId));
+        closeSet.insert(currentNode.m_iId);
+        for (int neighbor : adjList.m_vVertexes[currentNode.m_iId])
+        {
+            solution.m_vAccessed.insert(SolutionList::lessFirst(currentNode.m_iId, neighbor));
+            // if we found endIndex, it's end
+            if (neighbor == endIndex)
+            {
+                parent[neighbor] = currentNode.m_iId;
+                // collect the path from endIndex to beginIndex
+                for (int i = endIndex; i != beginIndex; i = parent[i])
+                {
+                    solution.m_vSolution.push_back(pair<int, int>(i, parent[i]));
+                }
+                return solution;
+            }
+
+            // the neighbor is already in close set
+            if (closeSet.count(neighbor) != 0)
+            {
+                // skip the node already close
+                continue;
+            }
+            // the neighbor is not in open set
+            else if (openSet.count(neighbor) == 0)
+            {
+                // insert the node to open queue and open set
+                AStarNode toInsert(neighbor);
+                toInsert.m_iG = currentNode.m_iG + 1;
+                toInsert.m_iH = hFunc(neighbor, endIndex);
+                toInsert.m_iF = toInsert.m_iG + toInsert.m_iH;
+                handleVector[neighbor] = openQueue.push(toInsert);
+                openSet.insert(neighbor);
+
+                // set the parent
+                parent[neighbor] = currentNode.m_iId;
+            }
+            // the neighbor is already in open set
+            else
+            {
+                AStarNode neighborNode = openQueue.value(handleVector[neighbor]);
+                int newG = currentNode.m_iG + 1;
+                // if neighborNode has a better parent(a less G value), reparent and update it
+                if (newG < neighborNode.m_iG)
+                {
+                    neighborNode.m_iG = newG;
+                    neighborNode.m_iF = neighborNode.m_iH + newG;
+                    openQueue.update(handleVector[neighbor], neighborNode);
+                    parent[neighbor] = currentNode.m_iId;
+                }
+            }
+        }
+    }
+
+    // no solution
+    return SolutionList();
+}

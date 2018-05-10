@@ -5,6 +5,7 @@
 #include "prim.h"
 #include "recursivedivision.h"
 #include "wallfollower.h"
+#include "astar.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -34,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     foreach (QAction *action, ui->menuSolve->actions())
     {
         m_solveGroup.addAction(action);
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(on_buttonSolve_clicked()));
     }
     m_genGroup.setExclusive(true);
 
@@ -157,19 +159,34 @@ void MainWindow::doSolve()
         WallFollower wf(WallFollower::E_RIGHT_HAND);
         m_solutionList = wf.solve(m_adjList);
     }
+    else if (ui->actionManhattan->isChecked())
+    {
+        AStar as(AStar::E_MANHATTAN);
+        m_solutionList = as.solve(m_adjList);
+    }
+    else if (ui->actionEuclidian->isChecked())
+    {
+        AStar as(AStar::E_EUCLIDIAN);
+        m_solutionList = as.solve(m_adjList);
+    }
+    else if (ui->actionZero->isChecked())
+    {
+        AStar as(AStar::E_0);
+        m_solutionList = as.solve(m_adjList);
+    }
 
     size_t num = 0;
     num = m_solutionList.m_vSolution.size() + 1;
-    ui->labelSolutionNode->setText(num != 0 ? QString::number(num) : QString("/"));
-    ui->labelSolutionNodePercent->setText(num != 0 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelSolutionNode->setText(num != 1 ? QString::number(num) : QString("/"));
+    ui->labelSolutionNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
 
     num = m_solutionList.m_vAccessed.size() + 1;
-    ui->labelAccessedNode->setText(num != 0 ? QString::number(num) : QString("/"));
-    ui->labelAccessedNodePercent->setText(num != 0 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelAccessedNode->setText(num != 1 ? QString::number(num) : QString("/"));
+    ui->labelAccessedNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
 
     num = m_solutionList.m_vTrace.size() + 1;
-    ui->labelTraceNode->setText(num != 0 ? QString::number(num) : QString("/"));
-    ui->labelTraceNodePercent->setText(num != 0 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelTraceNode->setText(num != 1 ? QString::number(num) : QString("/"));
+    ui->labelTraceNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
 
     ui->mazeWidget->setSolutionList(m_solutionList);
 }

@@ -491,6 +491,9 @@
     </property>
     <addaction name="actionLeftHand"/>
     <addaction name="actionRightHand"/>
+    <addaction name="actionManhattan"/>
+    <addaction name="actionEuclidian"/>
+    <addaction name="actionZero"/>
    </widget>
    <addaction name="menuGen"/>
    <addaction name="menuSolve"/>
@@ -597,6 +600,30 @@
    </property>
    <property name="text">
     <string>Wall follower(Right hand)</string>
+   </property>
+  </action>
+  <action name="actionManhattan">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>A*(Manhattan)</string>
+   </property>
+  </action>
+  <action name="actionEuclidian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>A*(Euclidian)</string>
+   </property>
+  </action>
+  <action name="actionZero">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>A*(0)</string>
    </property>
   </action>
  </widget>

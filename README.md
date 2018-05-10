@@ -1,5 +1,5 @@
 
-#Maze
+# Maze
 
 Generate maze and its solution using different algorithms.
 
@@ -15,5 +15,6 @@ They are all from https://en.wikipedia.org/wiki/Maze_generation_algorithm
 Maze solving algorithms include:
 
 1. Wall follower
+2. A*
 
 They are all from https://en.wikipedia.org/wiki/Maze_solving_algorithm

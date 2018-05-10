@@ -34,7 +34,8 @@ SOURCES += \
     prim.cpp \
     recursivedivision.cpp \
     solutionlist.cpp \
-    wallfollower.cpp
+    wallfollower.cpp \
+    astar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,7 +47,9 @@ HEADERS += \
     prim.h \
     recursivedivision.h \
     solutionlist.h \
-    wallfollower.h
+    wallfollower.h \
+    astar.h \
+    mutable_priority_queue.h
 
 FORMS += \
         mainwindow.ui
