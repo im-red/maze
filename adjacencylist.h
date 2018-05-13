@@ -6,7 +6,7 @@
 
 struct AdjacencyList
 {
-    AdjacencyList(int width, int height);
+    AdjacencyList(int width = -1, int height = -1);
 
     // init list with all adjacent point linked
     void linkAllVertexes();

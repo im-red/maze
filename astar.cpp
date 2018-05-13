@@ -23,35 +23,17 @@ SolutionList AStar::solve(AdjacencyList &adjList)
     const int width = adjList.m_iWidth;
     const int height = adjList.m_iHeight;
 
-    function<int(int, int)> hFunc;
+    function<int(int, int, int)> hFunc;
     switch (m_hType)
     {
     case E_MANHATTAN:
-        hFunc = [&](int p, int q)
-        {
-            int x1 = p % width;
-            int y1 = p / width;
-            int x2 = q % width;
-            int y2 = q / width;
-
-            return abs(x1 - x2) + abs(y1 - y2);
-        };
+        hFunc = manhattanDistance;
         break;
     case E_EUCLIDIAN:
-        hFunc = [&](int p, int q)
-        {
-            int x1 = p % width;
-            int y1 = p / width;
-            int x2 = q % width;
-            int y2 = q / width;
-
-            printf("%d\n", static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))));
-
-            return static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
-        };
+        hFunc = euclidianDistance;
         break;
     case E_0:
-        hFunc = [](int p, int q) { (void)p; (void)q; return 0; };
+        hFunc = zeroDistance;
         break;
     default:
         assert(false);
@@ -106,7 +88,7 @@ SolutionList AStar::solve(AdjacencyList &adjList)
                 // insert the node to open queue and open set
                 AStarNode toInsert(neighbor);
                 toInsert.m_iG = currentNode.m_iG + 1;
-                toInsert.m_iH = hFunc(neighbor, endIndex);
+                toInsert.m_iH = hFunc(neighbor, endIndex, width);
                 toInsert.m_iF = toInsert.m_iG + toInsert.m_iH;
                 handleVector[neighbor] = openQueue.push(toInsert);
                 openSet.insert(neighbor);
@@ -133,4 +115,32 @@ SolutionList AStar::solve(AdjacencyList &adjList)
 
     // no solution
     return SolutionList();
+}
+
+int AStar::manhattanDistance(int p, int q, int width)
+{
+    int x1 = p % width;
+    int y1 = p / width;
+    int x2 = q % width;
+    int y2 = q / width;
+
+    return abs(x1 - x2) + abs(y1 - y2);
+}
+
+int AStar::euclidianDistance(int p, int q, int width)
+{
+    int x1 = p % width;
+    int y1 = p / width;
+    int x2 = q % width;
+    int y2 = q / width;
+
+    return static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
+}
+
+int AStar::zeroDistance(int p, int q, int width)
+{
+    (void)p;
+    (void)q;
+    (void)width;
+    return 0;
 }

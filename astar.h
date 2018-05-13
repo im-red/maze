@@ -26,6 +26,9 @@ public:
 
     SolutionList solve(AdjacencyList &adjList);
 private:
+    static int manhattanDistance(int p, int q, int width);
+    static int euclidianDistance(int p, int q, int width);
+    static int zeroDistance(int p, int q, int width);
     E_HFUNC m_hType;
 };
 

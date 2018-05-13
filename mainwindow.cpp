@@ -13,6 +13,7 @@
 #include <ctime>
 #include <random>
 #include <vector>
+#include <cstdlib>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_solveGroup(this)
     , m_adjList(-1, -1)
 {
+    srand(time(nullptr));
     ui->setupUi(this);
 
     foreach (QAction *action, ui->menuGen->actions())
