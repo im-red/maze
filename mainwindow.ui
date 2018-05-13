@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>878</width>
-    <height>592</height>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
          <x>0</x>
          <y>0</y>
          <width>645</width>
-         <height>503</height>
+         <height>538</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -229,6 +229,13 @@
         </property>
         <property name="text">
          <string>Solve</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="enterButton">
+        <property name="text">
+         <string>Enter the maze</string>
         </property>
        </widget>
       </item>

@@ -6,6 +6,7 @@
 #include "recursivedivision.h"
 #include "wallfollower.h"
 #include "astar.h"
+#include "glmazedialog.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -107,6 +108,12 @@ void MainWindow::on_checkBoxAccessed_toggled(bool checked)
 
     m_iShowWhat ^= MazeWidget::E_ACCESSED;
     ui->mazeWidget->refreshShowWhat(m_iShowWhat);
+}
+
+void MainWindow::on_enterButton_clicked()
+{
+    GLMazeDialog dialog;
+    dialog.exec();
 }
 
 void MainWindow::doGenerate()

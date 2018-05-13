@@ -35,7 +35,9 @@ SOURCES += \
     recursivedivision.cpp \
     solutionlist.cpp \
     wallfollower.cpp \
-    astar.cpp
+    astar.cpp \
+    glmazewidget.cpp \
+    glmazedialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,10 +51,16 @@ HEADERS += \
     solutionlist.h \
     wallfollower.h \
     astar.h \
-    mutable_priority_queue.h
+    mutable_priority_queue.h \
+    glmazewidget.h \
+    glmazedialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    glmazedialog.ui
 
 DISTFILES += \
     README.md
+
+RESOURCES += \
+    res.qrc

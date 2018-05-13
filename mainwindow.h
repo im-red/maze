@@ -32,6 +32,7 @@ private slots:
     void on_checkBoxPath_toggled(bool checked);
     void on_checkBoxSolution_toggled(bool checked);
     void on_checkBoxAccessed_toggled(bool checked);
+    void on_enterButton_clicked();
 
 
 private:
