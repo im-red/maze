@@ -28,11 +28,10 @@ public:
     explicit MazeWidget(QWidget *parent = nullptr);
     void setAdjacencyList(AdjacencyList &list);
     void setSolutionList(SolutionList &list);
-    void setShowWhat(int showWhat) { m_showWhat = showWhat; }
 
 public slots:
     void save();
-    void refreshShowWhat(int showWhat);
+    void updateShowWhat(int showWhat);
 
 protected:
     void resizeEvent(QResizeEvent *event);

@@ -21,28 +21,30 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
     void on_buttonGenerate_clicked();
     void on_buttonSolve_clicked();
-    void on_saveButton_clicked();
-    void on_checkBoxWall_toggled(bool checked);
-    void on_checkBoxPath_toggled(bool checked);
-    void on_checkBoxSolution_toggled(bool checked);
-    void on_checkBoxAccessed_toggled(bool checked);
+    void on_actionSave_triggered();
+    void updateShowWhat();
 
 private:
+    void initConnection();
+    void initUI();
+
     void doGenerate();
     void doSolve();
 
+    void updateMazeStat();
+    void updateSolutionStat();
+
     Ui::MainWindow *ui;
 
-    int m_showWhat;
     QActionGroup m_genGroup;
     QActionGroup m_solveGroup;
-    AdjacencyList m_adjList;
+    AdjacencyList m_adjacencyList;
     SolutionList m_solutionList;
     std::vector<QLabel *> m_nodeNumLabels;
     std::vector<QLabel *> m_nodePercentLabels;

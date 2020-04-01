@@ -35,7 +35,7 @@ void MazeWidget::setAdjacencyList(AdjacencyList &list)
     generatePath();
     generateWall();
 
-    refreshShowWhat(m_showWhat);
+    updateShowWhat(m_showWhat);
 }
 
 void MazeWidget::setSolutionList(SolutionList &list)
@@ -45,7 +45,7 @@ void MazeWidget::setSolutionList(SolutionList &list)
     generateSolution();
     generateAccessed();
 
-    refreshShowWhat(m_showWhat);
+    updateShowWhat(m_showWhat);
 }
 
 void MazeWidget::save()
@@ -61,7 +61,7 @@ void MazeWidget::save()
     pixmap.save(fileName, "png");
 }
 
-void MazeWidget::refreshShowWhat(int showWhat)
+void MazeWidget::updateShowWhat(int showWhat)
 {
     m_showWhat = showWhat;
 
@@ -130,7 +130,7 @@ void MazeWidget::resizeEvent(QResizeEvent *)
         generateWall();
         generateSolution();
         generateAccessed();
-        refreshShowWhat(m_showWhat);
+        updateShowWhat(m_showWhat);
     }
 }
 
