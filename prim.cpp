@@ -9,24 +9,24 @@
 
 using namespace std;
 
-Prim::Prim(int width, int height)
-    : m_iWidth(width)
-    , m_iHeight(height)
+Prim::Prim(int row, int column)
+    : m_row(row)
+    , m_column(column)
 {
 
 }
 
 AdjacencyList Prim::generate()
 {
-    AdjacencyList result(m_iWidth, m_iHeight);
-    result.unlinkAllVertexes();
+    AdjacencyList result(m_row, m_column);
+    result.unlinkAllNodes();
 
-    vector<bool> linked(m_iWidth * m_iHeight, false);
+    vector<bool> linked(m_row * m_column, false);
     linked[0] = true;
 
     set<pair<int ,int>> paths;
     paths.insert(pair<int, int>(0, 1));
-    paths.insert(pair<int, int>(0, m_iWidth));
+    paths.insert(pair<int, int>(0, m_column));
 
     static default_random_engine e(time(nullptr));
 
@@ -58,7 +58,7 @@ AdjacencyList Prim::generate()
         linked[current] = true;
 
         // add all not accessed path to paths, and delete all invalid path from paths
-        for (auto i : result.m_vVertexesAllLinked[current])
+        for (auto i : result.m_nodesAllLinked[current])
         {
             pair<int, int> currentPath;
             if (i > current)

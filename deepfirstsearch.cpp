@@ -5,37 +5,37 @@
 
 using namespace std;
 
-DeepFirstSearch::DeepFirstSearch(int width, int height)
-    : m_iWidth(width)
-    , m_iHeight(height)
+DeepFirstSearch::DeepFirstSearch(int row, int column)
+    : m_row(row)
+    , m_column(column)
 {
 
 }
 
 AdjacencyList DeepFirstSearch::generate()
 {
-    AdjacencyList result(m_iWidth, m_iHeight);
-    result.unlinkAllVertexes();
+    AdjacencyList result(m_row, m_column);
+    result.unlinkAllNodes();
 
-    vector<int> color(m_iWidth * m_iHeight, E_WHITE);
+    vector<int> color(m_row * m_column, White);
     vector<int> current;
-    current.reserve(m_iWidth * m_iHeight);
+    current.reserve(m_row * m_column);
 
-    color[0] = E_GRAY;
+    color[0] = Gray;
     current.push_back(0);
 
     while(current.size() != 0)
     {
         int last = current.back();
-        random_shuffle(result.m_vVertexesAllLinked[last].begin(), result.m_vVertexesAllLinked[last].end());
+        random_shuffle(result.m_nodesAllLinked[last].begin(), result.m_nodesAllLinked[last].end());
 
-        auto iter = result.m_vVertexesAllLinked[last].cbegin();
+        auto iter = result.m_nodesAllLinked[last].cbegin();
 
-        for (; iter != result.m_vVertexesAllLinked[last].cend(); iter++)
+        for (; iter != result.m_nodesAllLinked[last].cend(); iter++)
         {
-            if (color[*iter] == E_WHITE)
+            if (color[*iter] == White)
             {
-                color[*iter] = E_GRAY;
+                color[*iter] = Gray;
                 result.connect(last, *iter);
                 current.push_back(*iter);
                 break;
@@ -43,10 +43,10 @@ AdjacencyList DeepFirstSearch::generate()
         }
 
         // all adjacent points are found
-        if (iter == result.m_vVertexesAllLinked[last].cend())
+        if (iter == result.m_nodesAllLinked[last].cend())
         {
             current.pop_back();
-            color[last] = E_BLACK;
+            color[last] = Black;
         }
     }
 

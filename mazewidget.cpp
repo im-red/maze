@@ -15,27 +15,27 @@ using namespace std;
 
 MazeWidget::MazeWidget(QWidget *parent)
     : QLabel(parent)
-    , m_iShowWhat(E_PATH)
-    , m_adjList(-1, -1)
+    , m_showWhat(Path)
+    , m_adjacencyList(-1, -1)
 {
 
 }
 
-void MazeWidget::setAdjList(AdjacencyList &list)
+void MazeWidget::setAdjacencyList(AdjacencyList &list)
 {
-    m_adjList = list;
+    m_adjacencyList = list;
 
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
 
-    assert(width >= 2 && height >= 2);
+    assert(row >= 2 && column >= 2);
 
-    adjustSpacing(width, height);
+    adjustSpacing(row, column);
 
     generatePath();
     generateWall();
 
-    refreshShowWhat(m_iShowWhat);
+    refreshShowWhat(m_showWhat);
 }
 
 void MazeWidget::setSolutionList(SolutionList &list)
@@ -45,7 +45,7 @@ void MazeWidget::setSolutionList(SolutionList &list)
     generateSolution();
     generateAccessed();
 
-    refreshShowWhat(m_iShowWhat);
+    refreshShowWhat(m_showWhat);
 }
 
 void MazeWidget::save()
@@ -56,24 +56,24 @@ void MazeWidget::save()
         return;
     }
     //QPixmap pixmap(this->size());
-    QPixmap pixmap(this->width() + 2 * m_iPicSpacing, this->height() + 2 * m_iPicSpacing);
-    this->render(&pixmap, QPoint(m_iPicSpacing, m_iPicSpacing));
+    QPixmap pixmap(this->width() + 2 * m_pictureMargin, this->height() + 2 * m_pictureMargin);
+    this->render(&pixmap, QPoint(m_pictureMargin, m_pictureMargin));
     pixmap.save(fileName, "png");
 }
 
 void MazeWidget::refreshShowWhat(int showWhat)
 {
-    m_iShowWhat = showWhat;
+    m_showWhat = showWhat;
 
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
 
-    if (width == -1 && height == -1)
+    if (row == -1 || column == -1)
     {
         return;
     }
 
-    m_show = QImage(width * m_iSpacing + 1, height * m_iSpacing + 1, QImage::Format_ARGB32);
+    m_show = QImage(column * m_spacing + 1, row * m_spacing + 1, QImage::Format_ARGB32);
     m_show.fill(Qt::white);
 
     QPainter painter(&m_show);
@@ -84,30 +84,30 @@ void MazeWidget::refreshShowWhat(int showWhat)
     pen.setWidth(3);
     painter.setPen(pen);
 
-    painter.drawLine(0.5 * m_iSpacing, 0, 0.5 * m_iSpacing, m_iSpacing);
-    painter.drawLine(0.5 * m_iSpacing, m_iSpacing, 0, 0.5 * m_iSpacing);
-    painter.drawLine(0.5 * m_iSpacing, m_iSpacing, m_iSpacing, 0.5 * m_iSpacing);
+    painter.drawLine(0.5 * m_spacing, 0, 0.5 * m_spacing, m_spacing);
+    painter.drawLine(0.5 * m_spacing, m_spacing, 0, 0.5 * m_spacing);
+    painter.drawLine(0.5 * m_spacing, m_spacing, m_spacing, 0.5 * m_spacing);
 
-    painter.drawLine((0.5 + width - 1) * m_iSpacing, (height - 1) * m_iSpacing, (0.5 + width - 1) * m_iSpacing, height * m_iSpacing);
-    painter.drawLine((0.5 + width - 1) * m_iSpacing, height * m_iSpacing, (width - 1) * m_iSpacing, (0.5 + height - 1) * m_iSpacing);
-    painter.drawLine((0.5 + width - 1) * m_iSpacing, height * m_iSpacing, width * m_iSpacing, (0.5 + height - 1) * m_iSpacing);
+    painter.drawLine((0.5 + column - 1) * m_spacing, (row - 1) * m_spacing, (0.5 + column - 1) * m_spacing, row * m_spacing);
+    painter.drawLine((0.5 + column - 1) * m_spacing, row * m_spacing, (column - 1) * m_spacing, (0.5 + row - 1) * m_spacing);
+    painter.drawLine((0.5 + column - 1) * m_spacing, row * m_spacing, column * m_spacing, (0.5 + row - 1) * m_spacing);
 
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
 
-    if (m_iShowWhat & E_PATH)
+    if (m_showWhat & Path)
     {
         painter.drawImage(0, 0, m_path);
     }
-    if (m_iShowWhat & E_WALL)
+    if (m_showWhat & Wall)
     {
         painter.drawImage(0, 0, m_wall);
     }
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    if (m_iShowWhat & E_ACCESSED)
+    if (m_showWhat & Accessed)
     {
         painter.drawImage(0, 0, m_accessed);
     }
-    if (m_iShowWhat & E_SOLUTION)
+    if (m_showWhat & Solution)
     {
         painter.drawImage(0, 0, m_solution);
     }
@@ -116,60 +116,59 @@ void MazeWidget::refreshShowWhat(int showWhat)
     setPixmap(QPixmap::fromImage(m_show));
 }
 
-void MazeWidget::resizeEvent(QResizeEvent *event)
+void MazeWidget::resizeEvent(QResizeEvent *)
 {
-    Q_UNUSED(event)
-
     m_show.fill(Qt::white);
 
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
-    if (width != -1 && height != -1)
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
+
+    if (row != -1 && column != -1)
     {
-        adjustSpacing(width, height);
+        adjustSpacing(row, column);
         generatePath();
         generateWall();
         generateSolution();
         generateAccessed();
-        refreshShowWhat(m_iShowWhat);
+        refreshShowWhat(m_showWhat);
     }
 }
 
-void MazeWidget::initImage(QImage &image)
+void MazeWidget::clearImage(QImage &image)
 {
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
 
-    image = QImage(width * m_iSpacing + 1, height * m_iSpacing + 1, QImage::Format_ARGB32);
+    image = QImage(column * m_spacing + 1, row * m_spacing + 1, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 }
 
 void MazeWidget::drawEdge(QPainter &painter, int p, int q)
 {
-    int x1 = p % m_adjList.m_iWidth;
-    int y1 = p / m_adjList.m_iWidth;
-    int x2 = q % m_adjList.m_iWidth;
-    int y2 = q / m_adjList.m_iWidth;
+    int x1 = p % m_adjacencyList.m_column;
+    int y1 = p / m_adjacencyList.m_column;
+    int x2 = q % m_adjacencyList.m_column;
+    int y2 = q / m_adjacencyList.m_column;
 
-    painter.drawLine((x1 + 0.5) * m_iSpacing, (y1 + 0.5) * m_iSpacing, (x2 + 0.5) * m_iSpacing, (y2 + 0.5) * m_iSpacing);
+    painter.drawLine((x1 + 0.5) * m_spacing, (y1 + 0.5) * m_spacing, (x2 + 0.5) * m_spacing, (y2 + 0.5) * m_spacing);
 }
 
-void MazeWidget::adjustSpacing(int width, int height)
+void MazeWidget::adjustSpacing(int row, int column)
 {
-    int row_spacing = (dynamic_cast<QWidget *>(this->parent())->height() - 1) / height;
-    int column_spacing = (dynamic_cast<QWidget *>(this->parent())->width() - 1) / width;
-    m_iSpacing = row_spacing > column_spacing ? column_spacing : row_spacing;
-    m_iSpacing = m_iSpacing > m_iMinSpacing ? m_iSpacing : m_iMinSpacing;
+    int rowSpacing = (this->parentWidget()->height() - 1) / row;
+    int columnSpacing = (this->parentWidget()->width() - 1) / column;
+    m_spacing = rowSpacing > columnSpacing ? columnSpacing : rowSpacing;
+    m_spacing = m_spacing > m_minSpacing ? m_spacing : m_minSpacing;
 }
 
 void MazeWidget::generatePath()
 {
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
 
-    assert(width >= 2 && height >= 2);
+    assert(row >= 2 && column >= 2);
 
-    initImage(m_path);
+    clearImage(m_path);
 
     QPainter painter;
     painter.begin(&m_path);
@@ -179,15 +178,15 @@ void MazeWidget::generatePath()
     pen.setColor(Qt::black);
     painter.setPen(pen);
 
-    for (int i = 0; i < width * height; i++)
+    for (int i = 0; i < row * column; i++)
     {
-        if (count(m_adjList.m_vVertexes[i].begin(), m_adjList.m_vVertexes[i].end(), i + 1) == 1)
+        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + 1) == 1)
         {
             drawEdge(painter, i, i + 1);
         }
-        if (count(m_adjList.m_vVertexes[i].begin(), m_adjList.m_vVertexes[i].end(), i + width) == 1)
+        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + column) == 1)
         {
-            drawEdge(painter, i, i + width);
+            drawEdge(painter, i, i + column);
         }
     }
 
@@ -196,12 +195,12 @@ void MazeWidget::generatePath()
 
 void MazeWidget::generateWall()
 {
-    int width = m_adjList.m_iWidth;
-    int height = m_adjList.m_iHeight;
+    int column = m_adjacencyList.m_column;
+    int row = m_adjacencyList.m_row;
 
-    assert(width >= 2 && height >= 2);
+    assert(row >= 2 && column >= 2);
 
-    initImage(m_wall);
+    clearImage(m_wall);
 
     QPainter painter;
     painter.begin(&m_wall);
@@ -211,27 +210,27 @@ void MazeWidget::generateWall()
     pen.setColor(Qt::black);
     painter.setPen(pen);
 
-    for (int i = 0; i < width * height; i++)
+    for (int i = 0; i < row * column; i++)
     {
-        int x = i % width;
-        int y = i / width;
+        int x = i % column;
+        int y = i / column;
 
         if (x == 0)
         {
-            painter.drawLine(0, y * m_iSpacing, 0, (y + 1) * m_iSpacing);
+            painter.drawLine(0, y * m_spacing, 0, (y + 1) * m_spacing);
         }
         if (y == 0)
         {
-            painter.drawLine(x * m_iSpacing, 0, (x + 1) * m_iSpacing, 0);
+            painter.drawLine(x * m_spacing, 0, (x + 1) * m_spacing, 0);
         }
 
-        if (count(m_adjList.m_vVertexes[i].begin(), m_adjList.m_vVertexes[i].end(), i + 1) == 0)
+        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + 1) == 0)
         {
-            painter.drawLine((x + 1) * m_iSpacing, y * m_iSpacing, (x + 1) * m_iSpacing, (y + 1) * m_iSpacing);
+            painter.drawLine((x + 1) * m_spacing, y * m_spacing, (x + 1) * m_spacing, (y + 1) * m_spacing);
         }
-        if (count(m_adjList.m_vVertexes[i].begin(), m_adjList.m_vVertexes[i].end(), i + width) == 0)
+        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + column) == 0)
         {
-            painter.drawLine(x * m_iSpacing, (y + 1) * m_iSpacing, (x + 1) * m_iSpacing, (y + 1) * m_iSpacing);
+            painter.drawLine(x * m_spacing, (y + 1) * m_spacing, (x + 1) * m_spacing, (y + 1) * m_spacing);
         }
     }
 
@@ -240,7 +239,7 @@ void MazeWidget::generateWall()
 
 void MazeWidget::generateSolution()
 {
-    initImage(m_solution);
+    clearImage(m_solution);
 
     QPainter painter;
     painter.begin(&m_solution);
@@ -251,7 +250,7 @@ void MazeWidget::generateSolution()
     pen.setWidth(2);
     painter.setPen(pen);
 
-    for (auto &&edge : m_solutionList.m_vSolution)
+    for (auto &&edge : m_solutionList.m_solution)
     {
         drawEdge(painter, edge.first, edge.second);
     }
@@ -261,7 +260,7 @@ void MazeWidget::generateSolution()
 
 void MazeWidget::generateAccessed()
 {
-    initImage(m_accessed);
+    clearImage(m_accessed);
 
     QPainter painter;
     painter.begin(&m_accessed);
@@ -271,7 +270,7 @@ void MazeWidget::generateAccessed()
     pen.setColor(Qt::blue);
     painter.setPen(pen);
 
-    for (auto &&edge : m_solutionList.m_vAccessed)
+    for (auto &&edge : m_solutionList.m_accessed)
     {
         drawEdge(painter, edge.first, edge.second);
     }

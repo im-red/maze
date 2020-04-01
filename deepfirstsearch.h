@@ -6,18 +6,18 @@
 class DeepFirstSearch
 {
 public:
-    enum E_COLOR
+    enum Color
     {
-        E_WHITE,
-        E_GRAY,
-        E_BLACK
+        White,
+        Gray,
+        Black
     };
-    DeepFirstSearch(int width, int height);
+    DeepFirstSearch(int row, int column);
     AdjacencyList generate();
 
 private:
-    int m_iWidth;
-    int m_iHeight;
+    int m_row;
+    int m_column;
 };
 
 #endif // DEEPFIRSTSEARCH_H

@@ -5,19 +5,19 @@
 
 using namespace std;
 
-RecursiveDivision::RecursiveDivision(int width, int height)
-    : m_iWidth(width)
-    , m_iHeight(height)
+RecursiveDivision::RecursiveDivision(int row, int column)
+    : m_row(row)
+    , m_column(column)
 {
 
 }
 
 AdjacencyList RecursiveDivision::generate()
 {
-    AdjacencyList result(m_iWidth, m_iHeight);
-    result.linkAllVertexes();
+    AdjacencyList result(m_row, m_column);
+    result.linkAllNodes();
 
-    divide(result, 0, 0, m_iWidth - 1, m_iHeight - 1);
+    divide(result, 0, 0, m_column - 1, m_row - 1);
     return result;
 }
 
@@ -37,15 +37,15 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
 
     for (int i = left; i <= right; i++)
     {
-        int p = y * m_iWidth + i;
-        int q = (y + 1) * m_iWidth + i;
+        int p = y * m_column + i;
+        int q = (y + 1) * m_column + i;
         list.unconnect(p, q);
     }
 
     for (int i = top; i <= bottom; i++)
     {
-        int p = i * m_iWidth + x;
-        int q = i * m_iWidth + x + 1;
+        int p = i * m_column + x;
+        int q = i * m_column + x + 1;
         list.unconnect(p, q);
     }
 
@@ -68,13 +68,13 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
             int q = 0;
             if (i <= 1) // the gap is in top of bottom
             {
-                p = gapPos[i] * m_iWidth + x;
-                q = gapPos[i] * m_iWidth + x + 1;
+                p = gapPos[i] * m_column + x;
+                q = gapPos[i] * m_column + x + 1;
             }
             else // the gap is in left or right
             {
-                p = y * m_iWidth + gapPos[i];
-                q = (y + 1) * m_iWidth + gapPos[i];
+                p = y * m_column + gapPos[i];
+                q = (y + 1) * m_column + gapPos[i];
             }
             list.connect(p, q);
         }

@@ -7,18 +7,17 @@
 class WallFollower
 {
 public:
-
-    enum E_HAND
+    enum Hand
     {
-        E_LEFT_HAND,
-        E_RIGHT_HAND
+        LeftHand,
+        RightHand
     };
-    WallFollower(E_HAND hand);
+    WallFollower(Hand hand);
 
     SolutionList solve(AdjacencyList &adjList);
 
 private:
-    E_HAND m_hand;
+    Hand m_hand;
 };
 
 #endif // WALLFOLLOWER_H

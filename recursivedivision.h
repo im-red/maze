@@ -6,13 +6,13 @@
 class RecursiveDivision
 {
 public:
-    RecursiveDivision(int width, int height);
+    RecursiveDivision(int row, int column);
     AdjacencyList generate();
 
 private:
     void divide(AdjacencyList &list, int left, int top, int right, int bottom);
-    int m_iWidth;
-    int m_iHeight;
+    int m_row;
+    int m_column;
 };
 
 #endif // RECURSIVEDIVISION_H

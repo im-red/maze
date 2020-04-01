@@ -12,27 +12,27 @@
 
 using namespace std;
 
-AStar::AStar(E_HFUNC func)
-    : m_hType(func)
+AStar::AStar(HFunc func)
+    : m_hFuncType(func)
 {
 
 }
 
 SolutionList AStar::solve(AdjacencyList &adjList)
 {
-    const int width = adjList.m_iWidth;
-    const int height = adjList.m_iHeight;
+    const int column = adjList.m_column;
+    const int row = adjList.m_row;
 
     function<int(int, int, int)> hFunc;
-    switch (m_hType)
+    switch (m_hFuncType)
     {
-    case E_MANHATTAN:
+    case Manhattan:
         hFunc = manhattanDistance;
         break;
-    case E_EUCLIDIAN:
+    case Euclidian:
         hFunc = euclidianDistance;
         break;
-    case E_0:
+    case Zero:
         hFunc = zeroDistance;
         break;
     default:
@@ -44,10 +44,10 @@ SolutionList AStar::solve(AdjacencyList &adjList)
     set<int> closeSet;
     set<int> openSet;
 
-    vector<int> parent(width * height, -1);
-    vector<MutablePriorityQueue<AStarNode>::handle_type> handleVector(width * height);
+    vector<int> parent(row * column, -1);
+    vector<MutablePriorityQueue<AStarNode>::handle_type> handleVector(row * column);
 
-    const int endIndex = width * height - 1;
+    const int endIndex = row * column - 1;
     const int beginIndex = 0;
     AStarNode start(beginIndex);
     handleVector[start.m_iId] = openQueue.push(start);
@@ -61,9 +61,9 @@ SolutionList AStar::solve(AdjacencyList &adjList)
         AStarNode currentNode = openQueue.pop();
         openSet.erase(openSet.find(currentNode.m_iId));
         closeSet.insert(currentNode.m_iId);
-        for (int neighbor : adjList.m_vVertexes[currentNode.m_iId])
+        for (int neighbor : adjList.m_nodes[currentNode.m_iId])
         {
-            solution.m_vAccessed.insert(SolutionList::lessFirst(currentNode.m_iId, neighbor));
+            solution.m_accessed.insert(SolutionList::makePair(currentNode.m_iId, neighbor));
             // if we found endIndex, it's end
             if (neighbor == endIndex)
             {
@@ -71,7 +71,7 @@ SolutionList AStar::solve(AdjacencyList &adjList)
                 // collect the path from endIndex to beginIndex
                 for (int i = endIndex; i != beginIndex; i = parent[i])
                 {
-                    solution.m_vSolution.push_back(pair<int, int>(i, parent[i]));
+                    solution.m_solution.push_back(pair<int, int>(i, parent[i]));
                 }
                 return solution;
             }
@@ -88,7 +88,7 @@ SolutionList AStar::solve(AdjacencyList &adjList)
                 // insert the node to open queue and open set
                 AStarNode toInsert(neighbor);
                 toInsert.m_iG = currentNode.m_iG + 1;
-                toInsert.m_iH = hFunc(neighbor, endIndex, width);
+                toInsert.m_iH = hFunc(neighbor, endIndex, column);
                 toInsert.m_iF = toInsert.m_iG + toInsert.m_iH;
                 handleVector[neighbor] = openQueue.push(toInsert);
                 openSet.insert(neighbor);

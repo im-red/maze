@@ -20,7 +20,7 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , m_iShowWhat(0)
+    , m_showWhat(0)
     , m_genGroup(this)
     , m_solveGroup(this)
     , m_adjList(-1, -1)
@@ -51,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_nodePercentLabels.push_back(ui->label3neighborpercent);
     m_nodePercentLabels.push_back(ui->label4neighborpercent);
 
-    m_iShowWhat = ui->actionWall->isChecked() ? MazeWidget::E_WALL : 0 + ui->actionPath->isChecked() ? MazeWidget::E_PATH : 0;
-    ui->mazeWidget->setShowWhat(m_iShowWhat);
+    m_showWhat = ui->actionWall->isChecked() ? MazeWidget::Wall : 0 + ui->actionPath->isChecked() ? MazeWidget::Path : 0;
+    ui->mazeWidget->setShowWhat(m_showWhat);
 }
 
 MainWindow::~MainWindow()
@@ -81,57 +81,57 @@ void MainWindow::on_checkBoxWall_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
-    m_iShowWhat ^= MazeWidget::E_WALL;
-    ui->mazeWidget->refreshShowWhat(m_iShowWhat);
+    m_showWhat ^= MazeWidget::Wall;
+    ui->mazeWidget->refreshShowWhat(m_showWhat);
 }
 
 void MainWindow::on_checkBoxPath_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
-    m_iShowWhat ^= MazeWidget::E_PATH;
-    ui->mazeWidget->refreshShowWhat(m_iShowWhat);
+    m_showWhat ^= MazeWidget::Path;
+    ui->mazeWidget->refreshShowWhat(m_showWhat);
 }
 
 void MainWindow::on_checkBoxSolution_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
-    m_iShowWhat ^= MazeWidget::E_SOLUTION;
-    ui->mazeWidget->refreshShowWhat(m_iShowWhat);
+    m_showWhat ^= MazeWidget::Solution;
+    ui->mazeWidget->refreshShowWhat(m_showWhat);
 }
 
 void MainWindow::on_checkBoxAccessed_toggled(bool checked)
 {
     Q_UNUSED(checked)
 
-    m_iShowWhat ^= MazeWidget::E_ACCESSED;
-    ui->mazeWidget->refreshShowWhat(m_iShowWhat);
+    m_showWhat ^= MazeWidget::Accessed;
+    ui->mazeWidget->refreshShowWhat(m_showWhat);
 }
 
 void MainWindow::doGenerate()
 {
-    int width = ui->widthSpinBox->value();
-    int height = ui->heightSpinBox->value();
+    int column = ui->columnSpinBox->value();
+    int row = ui->rowSpinBox->value();
 
     if (ui->actionDFS->isChecked())
     {
-        DeepFirstSearch dfs(width, height);
+        DeepFirstSearch dfs(row, column);
         m_adjList = dfs.generate();
     }
     else if (ui->actionKruskal->isChecked())
     {
-        Kruskal kruskal(width, height);
+        Kruskal kruskal(row, column);
         m_adjList = kruskal.generate();
     }
     else if (ui->actionPrim->isChecked())
     {
-        Prim prim(width, height);
+        Prim prim(row, column);
         m_adjList = prim.generate();
     }
     else if (ui->actionDiv->isChecked())
     {
-        RecursiveDivision div(width, height);
+        RecursiveDivision div(row, column);
         m_adjList = div.generate();
     }
 
@@ -139,56 +139,56 @@ void MainWindow::doGenerate()
     for (int i = 0; i < stat.size(); i++)
     {
         m_nodeNumLabels[i]->setText(QString::number(stat[i]));
-        m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)));
+        m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjList.m_row * m_adjList.m_column)));
     }
-    ui->mazeWidget->setAdjList(m_adjList);
+    ui->mazeWidget->setAdjacencyList(m_adjList);
 }
 
 void MainWindow::doSolve()
 {
-    if (m_adjList.m_iWidth == -1 || m_adjList.m_iHeight == -1)
+    if (m_adjList.m_row == -1 || m_adjList.m_column == -1)
     {
         return;
     }
 
     if (ui->actionLeftHand->isChecked())
     {
-        WallFollower wf(WallFollower::E_LEFT_HAND);
+        WallFollower wf(WallFollower::LeftHand);
         m_solutionList = wf.solve(m_adjList);
     }
     else if (ui->actionRightHand->isChecked())
     {
-        WallFollower wf(WallFollower::E_RIGHT_HAND);
+        WallFollower wf(WallFollower::RightHand);
         m_solutionList = wf.solve(m_adjList);
     }
     else if (ui->actionManhattan->isChecked())
     {
-        AStar as(AStar::E_MANHATTAN);
+        AStar as(AStar::Manhattan);
         m_solutionList = as.solve(m_adjList);
     }
     else if (ui->actionEuclidian->isChecked())
     {
-        AStar as(AStar::E_EUCLIDIAN);
+        AStar as(AStar::Euclidian);
         m_solutionList = as.solve(m_adjList);
     }
     else if (ui->actionZero->isChecked())
     {
-        AStar as(AStar::E_0);
+        AStar as(AStar::Zero);
         m_solutionList = as.solve(m_adjList);
     }
 
     size_t num = 0;
-    num = m_solutionList.m_vSolution.size() + 1;
+    num = m_solutionList.m_solution.size() + 1;
     ui->labelSolutionNode->setText(num != 1 ? QString::number(num) : QString("/"));
-    ui->labelSolutionNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelSolutionNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_row * m_adjList.m_column)) : QString("/"));
 
-    num = m_solutionList.m_vAccessed.size() + 1;
+    num = m_solutionList.m_accessed.size() + 1;
     ui->labelAccessedNode->setText(num != 1 ? QString::number(num) : QString("/"));
-    ui->labelAccessedNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelAccessedNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_row * m_adjList.m_column)) : QString("/"));
 
-    num = m_solutionList.m_vTrace.size() + 1;
+    num = m_solutionList.m_trace.size() + 1;
     ui->labelTraceNode->setText(num != 1 ? QString::number(num) : QString("/"));
-    ui->labelTraceNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_iWidth * m_adjList.m_iHeight)) : QString("/"));
+    ui->labelTraceNodePercent->setText(num != 1 ? QString::number(num * 100.0 / (m_adjList.m_row * m_adjList.m_column)) : QString("/"));
 
     ui->mazeWidget->setSolutionList(m_solutionList);
 }

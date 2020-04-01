@@ -6,12 +6,12 @@
 
 struct AdjacencyList
 {
-    AdjacencyList(int width = -1, int height = -1);
+    AdjacencyList(int row = -1, int column = -1);
 
     // init list with all adjacent point linked
-    void linkAllVertexes();
+    void linkAllNodes();
     // init list with all adjacent point unlinked
-    void unlinkAllVertexes();
+    void unlinkAllNodes();
 
     void generateAllLink();
 
@@ -31,10 +31,11 @@ struct AdjacencyList
     // return the node num having 1/2/3/4 neighbors
     static std::vector<int> neighborStat(AdjacencyList &list);
 
-    int m_iWidth;
-    int m_iHeight;
-    std::vector<std::vector<int>> m_vVertexes;
-    std::vector<std::vector<int>> m_vVertexesAllLinked;
+    int m_row;
+    int m_column;
+
+    std::vector<std::vector<int>> m_nodes;
+    std::vector<std::vector<int>> m_nodesAllLinked;
 };
 
 #endif // ADJACENCYLIST_H

@@ -28,8 +28,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>645</width>
-         <height>503</height>
+         <width>656</width>
+         <height>508</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -109,12 +109,12 @@
            </size>
           </property>
           <property name="text">
-           <string>Width</string>
+           <string>Column</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="widthSpinBox">
+         <widget class="QSpinBox" name="columnSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -169,12 +169,12 @@
            </size>
           </property>
           <property name="text">
-           <string>Height</string>
+           <string>Row</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="heightSpinBox">
+         <widget class="QSpinBox" name="rowSpinBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>

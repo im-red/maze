@@ -3,16 +3,16 @@
 using namespace std;
 
 UnionFind::UnionFind(int n)
-    : m_count(n)
-    , m_connection(0)
+    : m_pointCount(n)
+    , m_connectionCount(0)
 {
-    m_vPoints = vector<int>(n);
-    m_vTreeSize = vector<int>(n);
+    m_index2parent = vector<int>(n);
+    m_index2treeSize = vector<int>(n);
 
     for (int i = 0; i < n; i++)
     {
-        m_vPoints[i] = i;
-        m_vTreeSize[i] = 1;
+        m_index2parent[i] = i;
+        m_index2treeSize[i] = 1;
     }
 }
 
@@ -25,28 +25,29 @@ void UnionFind::connect(int p, int q)
 {
     int i = root(p);
     int j = root(q);
+
     if (i == j)
     {
         return;
     }
-    if (m_vTreeSize[i] < m_vTreeSize[j])
+    if (m_index2treeSize[i] < m_index2treeSize[j])
     {
-        m_vPoints[i] = j;
-        m_vTreeSize[j] += m_vTreeSize[i];
+        m_index2parent[i] = j;
+        m_index2treeSize[j] += m_index2treeSize[i];
     }
     else
     {
-        m_vPoints[j] = i;
-        m_vTreeSize[i] += m_vTreeSize[j];
+        m_index2parent[j] = i;
+        m_index2treeSize[i] += m_index2treeSize[j];
     }
-    m_connection++;
+    m_connectionCount++;
 }
 
 int UnionFind::root(int p)
 {
-    while (p != m_vPoints[p])
+    while (p != m_index2parent[p])
     {
-        p = m_vPoints[p];
+        p = m_index2parent[p];
     }
     return p;
 }

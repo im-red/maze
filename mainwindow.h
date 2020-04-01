@@ -33,14 +33,13 @@ private slots:
     void on_checkBoxSolution_toggled(bool checked);
     void on_checkBoxAccessed_toggled(bool checked);
 
-
 private:
     void doGenerate();
     void doSolve();
 
     Ui::MainWindow *ui;
 
-    int m_iShowWhat;
+    int m_showWhat;
     QActionGroup m_genGroup;
     QActionGroup m_solveGroup;
     AdjacencyList m_adjList;

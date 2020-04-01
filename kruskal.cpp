@@ -7,24 +7,24 @@
 
 using namespace std;
 
-Kruskal::Kruskal(int width, int height)
-    : m_iWidth(width)
-    , m_iHeight(height)
+Kruskal::Kruskal(int row, int column)
+    : m_row(row)
+    , m_column(column)
 {
 
 }
 
 AdjacencyList Kruskal::generate()
 {
-    AdjacencyList result(m_iWidth, m_iHeight);
-    result.unlinkAllVertexes();
+    AdjacencyList result(m_row, m_column);
+    result.unlinkAllNodes();
 
-    UnionFind uf(m_iWidth * m_iHeight);
+    UnionFind uf(m_row * m_column);
 
     vector<pair<int, int>> edges;
-    for (int i = 0; i < m_iWidth * m_iHeight; i++)
+    for (int i = 0; i < m_row * m_column; i++)
     {
-        for (auto iter : result.m_vVertexesAllLinked[i])
+        for (auto iter : result.m_nodesAllLinked[i])
         {
             // avoid duplicate edge
             if (i > iter)

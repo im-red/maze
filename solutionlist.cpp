@@ -9,9 +9,9 @@ SolutionList::SolutionList()
 
 void SolutionList::setupUseTrace()
 {
-    m_vSolution.clear();
-    m_vAccessed.clear();
-    for (auto &&edge : m_vTrace)
+    m_solution.clear();
+    m_accessed.clear();
+    for (auto &&edge : m_trace)
     {
         pair<int, int> orderedEdge;
         if (edge.first > edge.second)
@@ -22,14 +22,14 @@ void SolutionList::setupUseTrace()
         {
             orderedEdge = edge;
         }
-        if (m_vAccessed.count(orderedEdge) == 1)
+        if (m_accessed.count(orderedEdge) == 1)
         {
-            m_vSolution.erase(m_vSolution.end() - 1);
+            m_solution.erase(m_solution.end() - 1);
         }
         else
         {
-            m_vAccessed.insert(orderedEdge);
-            m_vSolution.push_back(orderedEdge);
+            m_accessed.insert(orderedEdge);
+            m_solution.push_back(orderedEdge);
         }
     }
 }

@@ -14,20 +14,21 @@ class QResizeEvent;
 class MazeWidget : public QLabel
 {
     Q_OBJECT
-public:
-    enum E_SHOW_WHAT
-    {
-        E_PATH = 1,
-        E_WALL = 1 << 1,
-        E_SOLUTION = 1 << 2,
-        E_ACCESSED = 1 << 3
-    };
-    explicit MazeWidget(QWidget *parent = nullptr);
-    void setAdjList(AdjacencyList &list);
-    void setSolutionList(SolutionList &list);
-    void setShowWhat(int showWhat) { m_iShowWhat = showWhat; }
 
-signals:
+public:
+    enum ShowWhat
+    {
+        Path = 1,
+        Wall = 1 << 1,
+        Solution = 1 << 2,
+        Accessed = 1 << 3
+    };
+
+public:
+    explicit MazeWidget(QWidget *parent = nullptr);
+    void setAdjacencyList(AdjacencyList &list);
+    void setSolutionList(SolutionList &list);
+    void setShowWhat(int showWhat) { m_showWhat = showWhat; }
 
 public slots:
     void save();
@@ -37,22 +38,23 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void initImage(QImage &image);
+    void clearImage(QImage &image);
     void drawEdge(QPainter &painter, int p, int q);
-    void adjustSpacing(int width, int height);
+    void adjustSpacing(int row, int column);
+
     void generatePath();
     void generateWall();
     void generateSolution();
     void generateAccessed();
 
 private:
-    int m_iShowWhat;
-    AdjacencyList m_adjList;
+    int m_showWhat;
+    AdjacencyList m_adjacencyList;
     SolutionList m_solutionList;
 
-    int m_iPicSpacing = 50;
-    int m_iSpacing = 50;
-    int m_iMinSpacing = 10;
+    int m_pictureMargin = 50;
+    int m_spacing = 50;
+    int m_minSpacing = 10;
 
     QImage m_wall;
     QImage m_path;

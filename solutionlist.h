@@ -11,11 +11,11 @@ struct SolutionList
 
     void setupUseTrace();
 
-    std::vector<std::pair<int, int>> m_vSolution;
-    std::set<std::pair<int, int>> m_vAccessed;
-    std::vector<std::pair<int, int>> m_vTrace;
+    std::vector<std::pair<int, int>> m_solution;
+    std::set<std::pair<int, int>> m_accessed;
+    std::vector<std::pair<int, int>> m_trace;
 
-    static std::pair<int, int> lessFirst(const int &a, const int &b)
+    static std::pair<int, int> makePair(const int &a, const int &b)
     {
         if (a < b)
         {

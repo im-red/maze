@@ -16,20 +16,21 @@ struct AStarNode
 class AStar
 {
 public:
-    enum E_HFUNC
+    enum HFunc
     {
-        E_MANHATTAN,
-        E_EUCLIDIAN,
-        E_0
+        Manhattan,
+        Euclidian,
+        Zero
     };
-    AStar(E_HFUNC func);
+    AStar(HFunc func);
 
     SolutionList solve(AdjacencyList &adjList);
+
 private:
     static int manhattanDistance(int p, int q, int width);
     static int euclidianDistance(int p, int q, int width);
     static int zeroDistance(int p, int q, int width);
-    E_HFUNC m_hType;
+    HFunc m_hFuncType;
 };
 
 #endif // ASTAR_H

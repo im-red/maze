@@ -6,12 +6,12 @@
 class Kruskal
 {
 public:
-    Kruskal(int width, int height);
+    Kruskal(int row, int column);
     AdjacencyList generate();
 
 private:
-    int m_iWidth;
-    int m_iHeight;
+    int m_row;
+    int m_column;
 };
 
 #endif // KRUSKAL_H
