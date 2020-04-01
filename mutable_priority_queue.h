@@ -14,14 +14,14 @@ public:
     typedef size_t handle_type;
     typedef T value_type;
 
-    MutablePriorityQueue(std::function<bool(value_type &, value_type &)> comp)
+    explicit MutablePriorityQueue(std::function<bool(value_type &, value_type &)> comp)
         : m_funcComp(comp)
     {
         // the first place is not used
         m_vHandleHeap.push_back(-1);
     }
-    size_t size() { return m_vHandleHeap.size() - 1; }
-    bool empty() { return m_vHandleHeap.size() == 1; }
+    size_t size() const { return m_vHandleHeap.size() - 1; }
+    bool empty() const { return m_vHandleHeap.size() == 1; }
     handle_type push(const value_type &v)
     {
         handle_type handle;

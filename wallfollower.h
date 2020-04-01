@@ -12,7 +12,7 @@ public:
         LeftHand,
         RightHand
     };
-    WallFollower(Hand hand);
+    explicit WallFollower(Hand hand);
 
     SolutionList solve(AdjacencyList &adjList);
 

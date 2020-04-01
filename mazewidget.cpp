@@ -21,7 +21,7 @@ MazeWidget::MazeWidget(QWidget *parent)
 
 }
 
-void MazeWidget::setAdjacencyList(AdjacencyList &list)
+void MazeWidget::setAdjacencyList(const AdjacencyList &list)
 {
     m_adjacencyList = list;
 
@@ -38,7 +38,7 @@ void MazeWidget::setAdjacencyList(AdjacencyList &list)
     updateShowWhat(m_showWhat);
 }
 
-void MazeWidget::setSolutionList(SolutionList &list)
+void MazeWidget::setSolutionList(const SolutionList &list)
 {
     m_solutionList = list;
 

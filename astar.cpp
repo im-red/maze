@@ -18,7 +18,7 @@ AStar::AStar(HFunc func)
 
 }
 
-SolutionList AStar::solve(AdjacencyList &adjList)
+SolutionList AStar::solve(const AdjacencyList &adjList)
 {
     const int column = adjList.m_column;
     const int row = adjList.m_row;

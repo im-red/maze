@@ -5,10 +5,9 @@ using namespace std;
 UnionFind::UnionFind(int n)
     : m_pointCount(n)
     , m_connectionCount(0)
+    , m_index2parent(n)
+    , m_index2treeSize(n)
 {
-    m_index2parent = vector<int>(n);
-    m_index2treeSize = vector<int>(n);
-
     for (int i = 0; i < n; i++)
     {
         m_index2parent[i] = i;

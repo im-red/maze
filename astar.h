@@ -22,9 +22,9 @@ public:
         Euclidian,
         Zero
     };
-    AStar(HFunc func);
+    explicit AStar(HFunc func);
 
-    SolutionList solve(AdjacencyList &adjList);
+    SolutionList solve(const AdjacencyList &adjList);
 
 private:
     static int manhattanDistance(int p, int q, int width);

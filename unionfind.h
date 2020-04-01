@@ -6,7 +6,7 @@
 class UnionFind
 {
 public:
-    UnionFind(int n);
+    explicit UnionFind(int n);
     ~UnionFind();
 
     bool connected(int p, int q) { return root(p) == root(q); }

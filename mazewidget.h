@@ -26,8 +26,8 @@ public:
 
 public:
     explicit MazeWidget(QWidget *parent = nullptr);
-    void setAdjacencyList(AdjacencyList &list);
-    void setSolutionList(SolutionList &list);
+    void setAdjacencyList(const AdjacencyList &list);
+    void setSolutionList(const SolutionList &list);
 
 public slots:
     void save();
