@@ -51,9 +51,9 @@ private:
     AdjacencyList m_adjacencyList;
     SolutionList m_solutionList;
 
-    int m_pictureMargin = 50;
-    int m_spacing = 50;
-    int m_minSpacing = 10;
+    const int m_pictureMargin;
+    const int m_minSpacing;
+    int m_spacing;
 
     QImage m_wall;
     QImage m_path;

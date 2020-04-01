@@ -17,6 +17,9 @@ MazeWidget::MazeWidget(QWidget *parent)
     : QLabel(parent)
     , m_showWhat(Path)
     , m_adjacencyList(-1, -1)
+    , m_pictureMargin(50)
+    , m_minSpacing(10)
+    , m_spacing(50)
 {
 
 }
@@ -84,13 +87,13 @@ void MazeWidget::updateShowWhat(int showWhat)
     pen.setWidth(3);
     painter.setPen(pen);
 
-    painter.drawLine(0.5 * m_spacing, 0, 0.5 * m_spacing, m_spacing);
-    painter.drawLine(0.5 * m_spacing, m_spacing, 0, 0.5 * m_spacing);
-    painter.drawLine(0.5 * m_spacing, m_spacing, m_spacing, 0.5 * m_spacing);
+    painter.drawLine(QPointF(0.5 * m_spacing, 0), QPointF(0.5 * m_spacing, m_spacing));
+    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(0, 0.5 * m_spacing));
+    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(m_spacing, 0.5 * m_spacing));
 
-    painter.drawLine((0.5 + column - 1) * m_spacing, (row - 1) * m_spacing, (0.5 + column - 1) * m_spacing, row * m_spacing);
-    painter.drawLine((0.5 + column - 1) * m_spacing, row * m_spacing, (column - 1) * m_spacing, (0.5 + row - 1) * m_spacing);
-    painter.drawLine((0.5 + column - 1) * m_spacing, row * m_spacing, column * m_spacing, (0.5 + row - 1) * m_spacing);
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, (row - 1) * m_spacing), QPointF((0.5 + column - 1) * m_spacing, row * m_spacing));
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF((column - 1) * m_spacing, (0.5 + row - 1) * m_spacing));
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF(column * m_spacing, (0.5 + row - 1) * m_spacing));
 
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
 
@@ -150,7 +153,7 @@ void MazeWidget::drawEdge(QPainter &painter, int p, int q)
     int x2 = q % m_adjacencyList.m_column;
     int y2 = q / m_adjacencyList.m_column;
 
-    painter.drawLine((x1 + 0.5) * m_spacing, (y1 + 0.5) * m_spacing, (x2 + 0.5) * m_spacing, (y2 + 0.5) * m_spacing);
+    painter.drawLine(QPointF((x1 + 0.5) * m_spacing, (y1 + 0.5) * m_spacing), QPointF((x2 + 0.5) * m_spacing, (y2 + 0.5) * m_spacing));
 }
 
 void MazeWidget::adjustSpacing(int row, int column)
