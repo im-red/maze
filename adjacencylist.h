@@ -4,19 +4,35 @@
 #include <vector>
 #include <set>
 
-struct AdjacencyList
+class AdjacencyList
 {
-    AdjacencyList(int row = -1, int column = -1);
+public:
+    AdjacencyList(int row = 0, int column = 0);
 
-    // init list with all adjacent point linked
-    void linkAllNodes();
-    // init list with all adjacent point unlinked
-    void unlinkAllNodes();
-
-    void generateAllLink();
+    // init list with all surround point connected
+    void connectAllSurround();
 
     void connect(int i, int j);
-    void unconnect(int i, int j);
+    void disconnect(int i, int j);
+
+    int row() const { return m_row; }
+    int column() const { return m_column; }
+
+    int valid() const { return m_row > 1 && m_column > 1; }
+    int nodeCount() const { return m_row * m_column; }
+    bool validIndex(int i) const { return i >= 0 && i < nodeCount(); }
+
+    const std::vector<int> &neighbor(int i) const;
+    std::vector<int> &neighbor(int i);
+
+    const std::vector<int> &surround(int i) const;
+    std::vector<int> &surround(int i);
+
+    // return the node num having 1/2/3/4 neighbors
+    std::vector<int> neighborStat() const;
+
+private:
+    void fillSurround();
 
     // check the position of point
     bool isLeftTop(int index);
@@ -28,14 +44,12 @@ struct AdjacencyList
     bool isTopEdge(int index);
     bool isBottomEdge(int index);
 
-    // return the node num having 1/2/3/4 neighbors
-    static std::vector<int> neighborStat(AdjacencyList &list);
-
+private:
     int m_row;
     int m_column;
 
-    std::vector<std::vector<int>> m_nodes;
-    std::vector<std::vector<int>> m_nodesAllLinked;
+    std::vector<std::vector<int>> m_index2neighbor;
+    std::vector<std::vector<int>> m_index2surround;
 };
 
 #endif // ADJACENCYLIST_H

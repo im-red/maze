@@ -1,5 +1,6 @@
 #include "astar.h"
 #include "mutable_priority_queue.h"
+#include "util.h"
 
 #include <queue>
 #include <set>
@@ -20,8 +21,8 @@ AStar::AStar(HFunc func)
 
 SolutionList AStar::solve(const AdjacencyList &adjList)
 {
-    const int column = adjList.m_column;
-    const int row = adjList.m_row;
+    const int column = adjList.column();
+    const int row = adjList.row();
 
     function<int(int, int, int)> hFunc;
     switch (m_hFuncType)
@@ -61,9 +62,9 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
         AStarNode currentNode = openQueue.pop();
         openSet.erase(openSet.find(currentNode.m_iId));
         closeSet.insert(currentNode.m_iId);
-        for (int neighbor : adjList.m_nodes[currentNode.m_iId])
+        for (int neighbor : adjList.neighbor(currentNode.m_iId))
         {
-            solution.m_accessed.insert(SolutionList::makePair(currentNode.m_iId, neighbor));
+            solution.m_accessed.insert(makeOrderedPair(currentNode.m_iId, neighbor));
             // if we found endIndex, it's end
             if (neighbor == endIndex)
             {
@@ -76,14 +77,12 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
                 return solution;
             }
 
-            // the neighbor is already in close set
-            if (closeSet.count(neighbor) != 0)
+            if (closeSet.count(neighbor) != 0) // the neighbor is already in close set
             {
                 // skip the node already close
                 continue;
             }
-            // the neighbor is not in open set
-            else if (openSet.count(neighbor) == 0)
+            else if (openSet.count(neighbor) == 0) // the neighbor is not in open set
             {
                 // insert the node to open queue and open set
                 AStarNode toInsert(neighbor);
@@ -96,8 +95,7 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
                 // set the parent
                 parent[neighbor] = currentNode.m_iId;
             }
-            // the neighbor is already in open set
-            else
+            else // the neighbor is already in open set
             {
                 AStarNode neighborNode = openQueue.value(handleVector[neighbor]);
                 int newG = currentNode.m_iG + 1;
@@ -134,7 +132,7 @@ int AStar::euclidianDistance(int p, int q, int width)
     int x2 = q % width;
     int y2 = q / width;
 
-    return static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
+    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
 
 int AStar::zeroDistance(int p, int q, int width)

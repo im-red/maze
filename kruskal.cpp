@@ -17,14 +17,13 @@ Kruskal::Kruskal(int row, int column)
 AdjacencyList Kruskal::generate()
 {
     AdjacencyList result(m_row, m_column);
-    result.unlinkAllNodes();
 
     UnionFind uf(m_row * m_column);
 
     vector<pair<int, int>> edges;
     for (int i = 0; i < m_row * m_column; i++)
     {
-        for (auto iter : result.m_nodesAllLinked[i])
+        for (auto iter : result.surround(i))
         {
             // avoid duplicate edge
             if (i > iter)

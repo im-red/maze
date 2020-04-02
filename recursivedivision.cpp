@@ -15,7 +15,7 @@ RecursiveDivision::RecursiveDivision(int row, int column)
 AdjacencyList RecursiveDivision::generate()
 {
     AdjacencyList result(m_row, m_column);
-    result.linkAllNodes();
+    result.connectAllSurround();
 
     divide(result, 0, 0, m_column - 1, m_row - 1);
     return result;
@@ -39,14 +39,14 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
     {
         int p = y * m_column + i;
         int q = (y + 1) * m_column + i;
-        list.unconnect(p, q);
+        list.disconnect(p, q);
     }
 
     for (int i = top; i <= bottom; i++)
     {
         int p = i * m_column + x;
         int q = i * m_column + x + 1;
-        list.unconnect(p, q);
+        list.disconnect(p, q);
     }
 
     // the position of no gap wall relative to (x, y), 0:top 1:bottom 2:left 3:right

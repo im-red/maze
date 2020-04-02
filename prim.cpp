@@ -1,4 +1,5 @@
 #include "prim.h"
+#include "util.h"
 
 #include <vector>
 #include <set>
@@ -19,7 +20,6 @@ Prim::Prim(int row, int column)
 AdjacencyList Prim::generate()
 {
     AdjacencyList result(m_row, m_column);
-    result.unlinkAllNodes();
 
     vector<bool> linked(m_row * m_column, false);
     linked[0] = true;
@@ -58,18 +58,9 @@ AdjacencyList Prim::generate()
         linked[current] = true;
 
         // add all not accessed path to paths, and delete all invalid path from paths
-        for (auto i : result.m_nodesAllLinked[current])
+        for (auto i : result.surround(current))
         {
-            pair<int, int> currentPath;
-            if (i > current)
-            {
-                currentPath = pair<int, int>(current, i);
-            }
-            else
-            {
-                currentPath = pair<int, int>(i, current);
-            }
-
+            pair<int, int> currentPath = makeOrderedPair(i, current);
             if (!linked[i])
             {
                 paths.insert(currentPath);

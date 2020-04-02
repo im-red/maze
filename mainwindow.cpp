@@ -129,8 +129,9 @@ void MainWindow::doGenerate()
 
 void MainWindow::doSolve()
 {
-    if (m_adjacencyList.m_row == -1 || m_adjacencyList.m_column == -1)
+    if (!m_adjacencyList.valid())
     {
+        qInfo() << "adjacency list is invalid";
         return;
     }
 
@@ -167,18 +168,18 @@ void MainWindow::doSolve()
 
 void MainWindow::updateMazeStat()
 {
-    vector<int> stat = AdjacencyList::neighborStat(m_adjacencyList);
+    vector<int> stat = m_adjacencyList.neighborStat();
     for (int i = 0; i < stat.size(); i++)
     {
         m_nodeNumLabels[i]->setText(QString::number(stat[i]));
-        m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjacencyList.m_row * m_adjacencyList.m_column)));
+        m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjacencyList.nodeCount())));
     }
     ui->mazeWidget->setAdjacencyList(m_adjacencyList);
 }
 
 void MainWindow::updateSolutionStat()
 {
-    int total = m_adjacencyList.m_row * m_adjacencyList.m_column;
+    int total = m_adjacencyList.nodeCount();
     int num = 0;
 
     num = m_solutionList.m_solution.size();

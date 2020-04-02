@@ -12,7 +12,7 @@ public:
     bool connected(int p, int q) { return root(p) == root(q); }
     void connect(int p, int q);
 
-    int pointCount() { return m_pointCount; }
+    int nodeCount() { return m_nodeCount; }
     int connectionCount() { return m_connectionCount; }
 
 private:
@@ -21,7 +21,7 @@ private:
 private:
     std::vector<int> m_index2parent;
     std::vector<int> m_index2treeSize;
-    int m_pointCount;
+    int m_nodeCount;
     int m_connectionCount;
 };
 

@@ -3,7 +3,7 @@
 using namespace std;
 
 UnionFind::UnionFind(int n)
-    : m_pointCount(n)
+    : m_nodeCount(n)
     , m_connectionCount(0)
     , m_index2parent(n)
     , m_index2treeSize(n)

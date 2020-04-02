@@ -6,12 +6,6 @@
 class DeepFirstSearch
 {
 public:
-    enum Color
-    {
-        White,
-        Gray,
-        Black
-    };
     DeepFirstSearch(int row, int column);
     AdjacencyList generate();
 

@@ -14,8 +14,14 @@ DeepFirstSearch::DeepFirstSearch(int row, int column)
 
 AdjacencyList DeepFirstSearch::generate()
 {
+    enum Color
+    {
+        White,
+        Gray,
+        Black
+    };
+
     AdjacencyList result(m_row, m_column);
-    result.unlinkAllNodes();
 
     vector<int> color(m_row * m_column, White);
     vector<int> current;
@@ -24,14 +30,14 @@ AdjacencyList DeepFirstSearch::generate()
     color[0] = Gray;
     current.push_back(0);
 
-    while(current.size() != 0)
+    while (current.size())
     {
         int last = current.back();
-        random_shuffle(result.m_nodesAllLinked[last].begin(), result.m_nodesAllLinked[last].end());
+        random_shuffle(result.surround(last).begin(), result.surround(last).end());
 
-        auto iter = result.m_nodesAllLinked[last].cbegin();
+        auto iter = result.surround(last).cbegin();
 
-        for (; iter != result.m_nodesAllLinked[last].cend(); iter++)
+        for (; iter != result.surround(last).cend(); iter++)
         {
             if (color[*iter] == White)
             {
@@ -43,7 +49,7 @@ AdjacencyList DeepFirstSearch::generate()
         }
 
         // all adjacent points are found
-        if (iter == result.m_nodesAllLinked[last].cend())
+        if (iter == result.surround(last).cend())
         {
             current.pop_back();
             color[last] = Black;

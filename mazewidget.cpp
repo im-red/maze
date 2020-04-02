@@ -28,8 +28,8 @@ void MazeWidget::setAdjacencyList(const AdjacencyList &list)
 {
     m_adjacencyList = list;
 
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     assert(row >= 2 && column >= 2);
 
@@ -68,8 +68,8 @@ void MazeWidget::updateShowWhat(int showWhat)
 {
     m_showWhat = showWhat;
 
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     if (row == -1 || column == -1)
     {
@@ -123,8 +123,8 @@ void MazeWidget::resizeEvent(QResizeEvent *)
 {
     m_show.fill(Qt::white);
 
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     if (row != -1 && column != -1)
     {
@@ -139,8 +139,8 @@ void MazeWidget::resizeEvent(QResizeEvent *)
 
 void MazeWidget::clearImage(QImage &image)
 {
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     image = QImage(column * m_spacing + 1, row * m_spacing + 1, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
@@ -148,10 +148,10 @@ void MazeWidget::clearImage(QImage &image)
 
 void MazeWidget::drawEdge(QPainter &painter, int p, int q)
 {
-    int x1 = p % m_adjacencyList.m_column;
-    int y1 = p / m_adjacencyList.m_column;
-    int x2 = q % m_adjacencyList.m_column;
-    int y2 = q / m_adjacencyList.m_column;
+    int x1 = p % m_adjacencyList.column();
+    int y1 = p / m_adjacencyList.column();
+    int x2 = q % m_adjacencyList.column();
+    int y2 = q / m_adjacencyList.column();
 
     painter.drawLine(QPointF((x1 + 0.5) * m_spacing, (y1 + 0.5) * m_spacing), QPointF((x2 + 0.5) * m_spacing, (y2 + 0.5) * m_spacing));
 }
@@ -166,8 +166,8 @@ void MazeWidget::adjustSpacing(int row, int column)
 
 void MazeWidget::generatePath()
 {
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     assert(row >= 2 && column >= 2);
 
@@ -183,11 +183,11 @@ void MazeWidget::generatePath()
 
     for (int i = 0; i < row * column; i++)
     {
-        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + 1) == 1)
+        if (count(m_adjacencyList.neighbor(i).begin(), m_adjacencyList.neighbor(i).end(), i + 1) == 1)
         {
             drawEdge(painter, i, i + 1);
         }
-        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + column) == 1)
+        if (count(m_adjacencyList.neighbor(i).begin(), m_adjacencyList.neighbor(i).end(), i + column) == 1)
         {
             drawEdge(painter, i, i + column);
         }
@@ -198,8 +198,8 @@ void MazeWidget::generatePath()
 
 void MazeWidget::generateWall()
 {
-    int column = m_adjacencyList.m_column;
-    int row = m_adjacencyList.m_row;
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
 
     assert(row >= 2 && column >= 2);
 
@@ -227,11 +227,11 @@ void MazeWidget::generateWall()
             painter.drawLine(x * m_spacing, 0, (x + 1) * m_spacing, 0);
         }
 
-        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + 1) == 0)
+        if (count(m_adjacencyList.neighbor(i).begin(), m_adjacencyList.neighbor(i).end(), i + 1) == 0)
         {
             painter.drawLine((x + 1) * m_spacing, y * m_spacing, (x + 1) * m_spacing, (y + 1) * m_spacing);
         }
-        if (count(m_adjacencyList.m_nodes[i].begin(), m_adjacencyList.m_nodes[i].end(), i + column) == 0)
+        if (count(m_adjacencyList.neighbor(i).begin(), m_adjacencyList.neighbor(i).end(), i + column) == 0)
         {
             painter.drawLine(x * m_spacing, (y + 1) * m_spacing, (x + 1) * m_spacing, (y + 1) * m_spacing);
         }

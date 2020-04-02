@@ -11,6 +11,8 @@ public:
 
 private:
     void divide(AdjacencyList &list, int left, int top, int right, int bottom);
+
+private:
     int m_row;
     int m_column;
 };

@@ -21,8 +21,8 @@ SolutionList WallFollower::solve(AdjacencyList &adjList)
     };
 
     map<Direction, int> delta;
-    delta[Up] = -adjList.m_column;
-    delta[Down] = adjList.m_column;
+    delta[Up] = -adjList.column();
+    delta[Down] = adjList.column();
     delta[Left] = -1;
     delta[Right] = 1;
 
@@ -53,19 +53,19 @@ SolutionList WallFollower::solve(AdjacencyList &adjList)
 
     SolutionList result;
     int currentNode = 0;
-    const int end = adjList.m_row * adjList.m_column - 1;
+    const int end = adjList.nodeCount() - 1;
     while (currentNode != end)
     {
         int forwardNode = currentNode + delta[forwardDirection];
         int turnNode = currentNode + delta[turnDirection];
 
-        if (find(adjList.m_nodes[currentNode].begin(), adjList.m_nodes[currentNode].end(), turnNode) != adjList.m_nodes[currentNode].end())
+        if (find(adjList.neighbor(currentNode).begin(), adjList.neighbor(currentNode).end(), turnNode) != adjList.neighbor(currentNode).end())
         {
             result.m_trace.push_back(pair<int, int>(currentNode, turnNode));
             refreshDirection(turnDirection);
             currentNode = turnNode;
         }
-        else if (find(adjList.m_nodes[currentNode].begin(), adjList.m_nodes[currentNode].end(), forwardNode) != adjList.m_nodes[currentNode].end())
+        else if (find(adjList.neighbor(currentNode).begin(), adjList.neighbor(currentNode).end(), forwardNode) != adjList.neighbor(currentNode).end())
         {
             result.m_trace.push_back(pair<int, int>(currentNode, forwardNode));
             currentNode = forwardNode;

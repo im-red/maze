@@ -7,96 +7,84 @@ using namespace std;
 AdjacencyList::AdjacencyList(int row, int column)
     : m_row(row)
     , m_column(column)
-{
+    , m_index2neighbor(m_row * m_column)
+    , m_index2surround(m_row * m_column)
 
+{
+    fillSurround();
 }
 
-void AdjacencyList::linkAllNodes()
+void AdjacencyList::connectAllSurround()
 {
-    assert(m_row > 1 && m_column > 1);
-
-    m_nodes = vector<vector<int>>(m_row * m_column);
-
-    generateAllLink();
-    m_nodes = m_nodesAllLinked;
+    assert(valid());
+    m_index2neighbor = m_index2surround;
 }
 
-void AdjacencyList::unlinkAllNodes()
+void AdjacencyList::fillSurround()
 {
-    assert(m_row > 1 && m_column > 1);
-
-    m_nodes = vector<vector<int>>(m_row * m_column);
-
-    generateAllLink();
-}
-
-void AdjacencyList::generateAllLink()
-{
-    m_nodesAllLinked = vector<vector<int>>(m_row * m_column);
-
-    int size = m_row * m_column;
+    int size = nodeCount();
     for (int i = 0; i < size; i++)
     {
         if (!(isLeftTop(i) || isRightTop(i) || isTopEdge(i)))
         {
-            m_nodesAllLinked[i].push_back(i - m_column);
+            m_index2surround[i].push_back(i - m_column);
         }
         if (!(isLeftBottom(i) || isRightBottom(i) || isBottomEdge(i)))
         {
-            m_nodesAllLinked[i].push_back(i + m_column);
+            m_index2surround[i].push_back(i + m_column);
         }
         if (!(isLeftTop(i) || isLeftBottom(i) || isLeftEdge(i)))
         {
-            m_nodesAllLinked[i].push_back(i - 1);
+            m_index2surround[i].push_back(i - 1);
         }
         if (!(isRightTop(i) || isRightBottom(i) || isRightEdge(i)))
         {
-            m_nodesAllLinked[i].push_back(i + 1);
+            m_index2surround[i].push_back(i + 1);
         }
     }
 }
 
 void AdjacencyList::connect(int i, int j)
 {
-    assert(i >= 0 && i < m_row * m_column && j >= 0 && j < m_row * m_column);
-    m_nodes[i].push_back(j);
-    m_nodes[j].push_back(i);
+    assert(valid() && validIndex(i) && validIndex(j));
+    m_index2neighbor[i].push_back(j);
+    m_index2neighbor[j].push_back(i);
 }
 
-void AdjacencyList::unconnect(int i, int j)
+void AdjacencyList::disconnect(int i, int j)
 {
-    assert(i >= 0 && i < m_row * m_column && j >= 0 && j < m_row * m_column);
-    m_nodes[i].erase(find(m_nodes[i].begin(), m_nodes[i].end(), j));
-    m_nodes[j].erase(find(m_nodes[j].begin(), m_nodes[j].end(), i));
+    assert(valid() && validIndex(i) && validIndex(j));
+    m_index2neighbor[i].erase(find(m_index2neighbor[i].begin(), m_index2neighbor[i].end(), j));
+    m_index2neighbor[j].erase(find(m_index2neighbor[j].begin(), m_index2neighbor[j].end(), i));
 }
 
 bool AdjacencyList::isLeftTop(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     return index == 0;
 }
 
 bool AdjacencyList::isRightTop(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     return index == (m_column - 1);
 }
 
 bool AdjacencyList::isLeftBottom(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     return index == (m_row - 1) * m_column;
 }
 
 bool AdjacencyList::isRightBottom(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     return index == (m_row * m_column - 1);
 }
 
 bool AdjacencyList::isLeftEdge(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     if (isLeftTop(index) || isLeftBottom(index))
     {
         return false;
@@ -106,7 +94,7 @@ bool AdjacencyList::isLeftEdge(int index)
 
 bool AdjacencyList::isRightEdge(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     if (isRightTop(index) || isRightBottom(index))
     {
         return false;
@@ -116,7 +104,7 @@ bool AdjacencyList::isRightEdge(int index)
 
 bool AdjacencyList::isTopEdge(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     if (isLeftTop(index) || isRightTop(index))
     {
         return false;
@@ -126,7 +114,7 @@ bool AdjacencyList::isTopEdge(int index)
 
 bool AdjacencyList::isBottomEdge(int index)
 {
-    assert(index >= 0 && index < m_row * m_column);
+    assert(validIndex(index));
     if (isLeftBottom(index) || isRightBottom(index))
     {
         return false;
@@ -134,14 +122,38 @@ bool AdjacencyList::isBottomEdge(int index)
     return index > ((m_row - 1) * m_column) && index < (m_row * m_column - 1);
 }
 
-vector<int> AdjacencyList::neighborStat(AdjacencyList &list)
+vector<int> AdjacencyList::neighborStat() const
 {
-    assert(list.m_row > 0 && list.m_column > 0);
+    assert(valid());
     vector<int> result(4, 0);
-    for (int i = 0; i < list.m_row * list.m_column; i++)
+    for (int i = 0; i < nodeCount(); i++)
     {
-        assert(list.m_nodes[i].size() >= 1 && list.m_nodes[i].size() <= 4);
-        result[list.m_nodes[i].size() - 1]++;
+        assert(neighbor(i).size() >= 1 && neighbor(i).size() <= 4);
+        result[neighbor(i).size() - 1]++;
     }
     return result;
+}
+
+const std::vector<int> &AdjacencyList::neighbor(int i) const
+{
+    assert(validIndex(i));
+    return m_index2neighbor[i];
+}
+
+std::vector<int> &AdjacencyList::neighbor(int i)
+{
+    assert(validIndex(i));
+    return m_index2neighbor[i];
+}
+
+const std::vector<int> &AdjacencyList::surround(int i) const
+{
+    assert(validIndex(i));
+    return m_index2surround[i];
+}
+
+std::vector<int> &AdjacencyList::surround(int i)
+{
+    assert(validIndex(i));
+    return m_index2surround[i];
 }
