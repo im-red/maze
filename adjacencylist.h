@@ -30,6 +30,13 @@
 class AdjacencyList
 {
 public:
+    enum GenerationActionType
+    {
+        BuildWall,
+        BreakWall
+    };
+
+public:
     AdjacencyList(int row = 0, int column = 0);
 
     // init list with all surround point connected
@@ -54,6 +61,10 @@ public:
     // return the node num having 1/2/3/4 neighbors
     std::vector<int> neighborStat() const;
 
+    GenerationActionType generationActionType() const { return m_gaType; }
+    int generationActionCount() const { return m_gaActions.size(); }
+    std::vector<std::pair<int, int>> generationActions() const { return m_gaActions; }
+
 private:
     void fillSurround();
 
@@ -73,4 +84,7 @@ private:
 
     std::vector<std::vector<int>> m_index2neighbor;
     std::vector<std::vector<int>> m_index2surround;
+
+    GenerationActionType m_gaType;
+    std::vector<std::pair<int, int>> m_gaActions;
 };

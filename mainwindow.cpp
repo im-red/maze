@@ -30,6 +30,7 @@
 #include "recursivedivision.h"
 #include "wallfollower.h"
 #include "astar.h"
+#include "visualizationdialog.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_genGroup(this)
     , m_solveGroup(this)
     , m_adjacencyList(-1, -1)
+    , m_vDialog(new VisualizationDialog)
 {
     srand(time(nullptr));
     ui->setupUi(this);
@@ -62,16 +64,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_buttonSolve_clicked()
-{
-    doSolve();
-    ui->checkBoxSolution->setChecked(true);
-}
-
 void MainWindow::on_buttonGenerate_clicked()
 {
     doGenerate();
     doSolve();
+    ui->buttonV->setEnabled(true);
+}
+
+void MainWindow::on_buttonV_clicked()
+{
+    m_vDialog->setAdjacencyList(m_adjacencyList);
+    m_vDialog->exec();
 }
 
 void MainWindow::on_actionSave_triggered()

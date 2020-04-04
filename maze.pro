@@ -35,6 +35,8 @@ SOURCES += \
     recursivedivision.cpp \
     solutionlist.cpp \
     util.cpp \
+    visualizationdialog.cpp \
+    visualizationwidget.cpp \
     wallfollower.cpp \
     astar.cpp
 
@@ -49,12 +51,15 @@ HEADERS += \
     recursivedivision.h \
     solutionlist.h \
     util.h \
+    visualizationdialog.h \
+    visualizationwidget.h \
     wallfollower.h \
     astar.h \
     mutable_priority_queue.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        visualizationdialog.ui
 
 DISTFILES += \
     README.md

@@ -34,6 +34,7 @@
 #include <vector>
 
 class QLabel;
+class VisualizationDialog;
 
 namespace Ui {
 class MainWindow;
@@ -49,7 +50,7 @@ public:
 
 private slots:
     void on_buttonGenerate_clicked();
-    void on_buttonSolve_clicked();
+    void on_buttonV_clicked();
     void on_actionSave_triggered();
     void updateShowWhat();
 
@@ -71,4 +72,6 @@ private:
     SolutionList m_solutionList;
     std::vector<QLabel *> m_nodeNumLabels;
     std::vector<QLabel *> m_nodePercentLabels;
+
+    VisualizationDialog *m_vDialog;
 };

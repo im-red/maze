@@ -23,9 +23,12 @@
  ********************************************************************************/
 
 #include "recursivedivision.h"
+#include "util.h"
 
 #include <random>
 #include <ctime>
+#include <vector>
+#include <utility>
 
 using namespace std;
 
@@ -38,6 +41,8 @@ RecursiveDivision::RecursiveDivision(int row, int column)
 
 AdjacencyList RecursiveDivision::generate()
 {
+    StopWatch sw(__FUNCTION__);
+
     AdjacencyList result(m_row, m_column);
     result.connectAllSurround();
 
@@ -59,18 +64,20 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
     int x = e() % (right - left) + left;
     int y = e() % (bottom - top) + top;
 
+    vector<pair<int, int>> toDisconnect;
+
     for (int i = left; i <= right; i++)
     {
         int p = y * m_column + i;
         int q = (y + 1) * m_column + i;
-        list.disconnect(p, q);
+        toDisconnect.emplace_back(p, q);
     }
 
     for (int i = top; i <= bottom; i++)
     {
         int p = i * m_column + x;
         int q = i * m_column + x + 1;
-        list.disconnect(p, q);
+        toDisconnect.emplace_back(p, q);
     }
 
     // the position of no gap wall relative to (x, y), 0:top 1:bottom 2:left 3:right
@@ -90,7 +97,7 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
         {
             int p = 0;
             int q = 0;
-            if (i <= 1) // the gap is in top of bottom
+            if (i <= 1) // the gap is in top or bottom
             {
                 p = gapPos[i] * m_column + x;
                 q = gapPos[i] * m_column + x + 1;
@@ -100,8 +107,14 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
                 p = y * m_column + gapPos[i];
                 q = (y + 1) * m_column + gapPos[i];
             }
-            list.connect(p, q);
+            pair<int, int> pair(p, q);
+            toDisconnect.erase(find(toDisconnect.begin(), toDisconnect.end(), pair));
         }
+    }
+
+    for (auto &pair : toDisconnect)
+    {
+        list.disconnect(pair.first, pair.second);
     }
 
     divide(list, left, top, x, y);

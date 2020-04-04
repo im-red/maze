@@ -23,6 +23,7 @@
  ********************************************************************************/
 
 #include "adjacencylist.h"
+#include "util.h"
 
 #include <cassert>
 
@@ -33,6 +34,7 @@ AdjacencyList::AdjacencyList(int row, int column)
     , m_column(column)
     , m_index2neighbor(m_row * m_column)
     , m_index2surround(m_row * m_column)
+    , m_gaType(BreakWall)
 
 {
     fillSurround();
@@ -41,6 +43,8 @@ AdjacencyList::AdjacencyList(int row, int column)
 void AdjacencyList::connectAllSurround()
 {
     assert(valid());
+
+    m_gaType = BuildWall;
     m_index2neighbor = m_index2surround;
 }
 
@@ -73,6 +77,7 @@ void AdjacencyList::connect(int i, int j)
     assert(valid() && validIndex(i) && validIndex(j));
     m_index2neighbor[i].push_back(j);
     m_index2neighbor[j].push_back(i);
+    m_gaActions.push_back(makeOrderedPair(i, j));
 }
 
 void AdjacencyList::disconnect(int i, int j)
@@ -80,6 +85,7 @@ void AdjacencyList::disconnect(int i, int j)
     assert(valid() && validIndex(i) && validIndex(j));
     m_index2neighbor[i].erase(find(m_index2neighbor[i].begin(), m_index2neighbor[i].end(), j));
     m_index2neighbor[j].erase(find(m_index2neighbor[j].begin(), m_index2neighbor[j].end(), i));
+    m_gaActions.push_back(makeOrderedPair(i, j));
 }
 
 bool AdjacencyList::isLeftTop(int index)
@@ -158,25 +164,25 @@ vector<int> AdjacencyList::neighborStat() const
     return result;
 }
 
-const std::vector<int> &AdjacencyList::neighbor(int i) const
+const vector<int> &AdjacencyList::neighbor(int i) const
 {
     assert(validIndex(i));
     return m_index2neighbor[i];
 }
 
-std::vector<int> &AdjacencyList::neighbor(int i)
+vector<int> &AdjacencyList::neighbor(int i)
 {
     assert(validIndex(i));
     return m_index2neighbor[i];
 }
 
-const std::vector<int> &AdjacencyList::surround(int i) const
+const vector<int> &AdjacencyList::surround(int i) const
 {
     assert(validIndex(i));
     return m_index2surround[i];
 }
 
-std::vector<int> &AdjacencyList::surround(int i)
+vector<int> &AdjacencyList::surround(int i)
 {
     assert(validIndex(i));
     return m_index2surround[i];

@@ -23,6 +23,7 @@
  ********************************************************************************/
 
 #include "mazewidget.h"
+#include "util.h"
 
 #include <QPainter>
 #include <QPen>
@@ -50,6 +51,8 @@ MazeWidget::MazeWidget(QWidget *parent)
 
 void MazeWidget::setAdjacencyList(const AdjacencyList &list)
 {
+    StopWatch sw(__FUNCTION__);
+
     m_adjacencyList = list;
 
     int column = m_adjacencyList.column();
@@ -67,6 +70,8 @@ void MazeWidget::setAdjacencyList(const AdjacencyList &list)
 
 void MazeWidget::setSolutionList(const SolutionList &list)
 {
+    StopWatch sw(__FUNCTION__);
+
     m_solutionList = list;
 
     generateSolution();
@@ -100,52 +105,14 @@ void MazeWidget::updateShowWhat(int showWhat)
         return;
     }
 
-    m_show = QImage(column * m_spacing + 1, row * m_spacing + 1, QImage::Format_ARGB32);
-    m_show.fill(Qt::white);
+    compositeShowing();
 
-    QPainter painter(&m_show);
-
-    QPen pen;
-    pen.setBrush(Qt::SolidPattern);
-    pen.setColor(Qt::green);
-    pen.setWidth(3);
-    painter.setPen(pen);
-
-    painter.drawLine(QPointF(0.5 * m_spacing, 0), QPointF(0.5 * m_spacing, m_spacing));
-    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(0, 0.5 * m_spacing));
-    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(m_spacing, 0.5 * m_spacing));
-
-    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, (row - 1) * m_spacing), QPointF((0.5 + column - 1) * m_spacing, row * m_spacing));
-    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF((column - 1) * m_spacing, (0.5 + row - 1) * m_spacing));
-    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF(column * m_spacing, (0.5 + row - 1) * m_spacing));
-
-    painter.setCompositionMode(QPainter::CompositionMode_Multiply);
-
-    if (m_showWhat & Path)
-    {
-        painter.drawImage(0, 0, m_path);
-    }
-    if (m_showWhat & Wall)
-    {
-        painter.drawImage(0, 0, m_wall);
-    }
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    if (m_showWhat & Accessed)
-    {
-        painter.drawImage(0, 0, m_accessed);
-    }
-    if (m_showWhat & Solution)
-    {
-        painter.drawImage(0, 0, m_solution);
-    }
-
-    painter.end();
-    setPixmap(QPixmap::fromImage(m_show));
+    setPixmap(QPixmap::fromImage(m_showing));
 }
 
 void MazeWidget::resizeEvent(QResizeEvent *)
 {
-    m_show.fill(Qt::white);
+    m_showing.fill(Qt::white);
 
     int column = m_adjacencyList.column();
     int row = m_adjacencyList.row();
@@ -190,6 +157,8 @@ void MazeWidget::adjustSpacing(int row, int column)
 
 void MazeWidget::generatePath()
 {
+    StopWatch sw(__FUNCTION__);
+
     int column = m_adjacencyList.column();
     int row = m_adjacencyList.row();
 
@@ -222,6 +191,8 @@ void MazeWidget::generatePath()
 
 void MazeWidget::generateWall()
 {
+    StopWatch sw(__FUNCTION__);
+
     int column = m_adjacencyList.column();
     int row = m_adjacencyList.row();
 
@@ -266,6 +237,8 @@ void MazeWidget::generateWall()
 
 void MazeWidget::generateSolution()
 {
+    StopWatch sw(__FUNCTION__);
+
     clearImage(m_solution);
 
     QPainter painter;
@@ -287,6 +260,8 @@ void MazeWidget::generateSolution()
 
 void MazeWidget::generateAccessed()
 {
+    StopWatch sw(__FUNCTION__);
+
     clearImage(m_accessed);
 
     QPainter painter;
@@ -300,6 +275,59 @@ void MazeWidget::generateAccessed()
     for (auto &&edge : m_solutionList.m_accessed)
     {
         drawEdge(painter, edge.first, edge.second);
+    }
+
+    painter.end();
+}
+
+void MazeWidget::compositeShowing()
+{
+    StopWatch sw(__FUNCTION__);
+
+    int column = m_adjacencyList.column();
+    int row = m_adjacencyList.row();
+
+    m_showing = QImage(column * m_spacing + 1, row * m_spacing + 1, QImage::Format_ARGB32);
+    m_showing.fill(Qt::white);
+
+    QPainter painter(&m_showing);
+
+    QPen pen;
+    pen.setBrush(Qt::SolidPattern);
+    pen.setColor(Qt::green);
+    pen.setWidth(3);
+    painter.setPen(pen);
+
+    painter.drawLine(QPointF(0.5 * m_spacing, 0), QPointF(0.5 * m_spacing, m_spacing));
+    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(0, 0.5 * m_spacing));
+    painter.drawLine(QPointF(0.5 * m_spacing, m_spacing), QPointF(m_spacing, 0.5 * m_spacing));
+
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, (row - 1) * m_spacing), QPointF((0.5 + column - 1) * m_spacing, row * m_spacing));
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF((column - 1) * m_spacing, (0.5 + row - 1) * m_spacing));
+    painter.drawLine(QPointF((0.5 + column - 1) * m_spacing, row * m_spacing), QPointF(column * m_spacing, (0.5 + row - 1) * m_spacing));
+
+    painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+
+    if (m_showWhat & Path)
+    {
+        StopWatch s("draw Path");
+        painter.drawImage(0, 0, m_path);
+    }
+    if (m_showWhat & Wall)
+    {
+        StopWatch s("draw Wall");
+        painter.drawImage(0, 0, m_wall);
+    }
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    if (m_showWhat & Accessed)
+    {
+        StopWatch s("draw Accessed");
+        painter.drawImage(0, 0, m_accessed);
+    }
+    if (m_showWhat & Solution)
+    {
+        StopWatch s("draw Solution");
+        painter.drawImage(0, 0, m_solution);
     }
 
     painter.end();
