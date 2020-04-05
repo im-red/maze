@@ -59,10 +59,7 @@ AdjacencyList Prim::generate()
         // random select a path in paths
         int pos = static_cast<int>(e() % paths.size());
         auto iter = paths.begin();
-        while (pos--)
-        {
-            iter++;
-        }
+        advance(iter, pos);
 
         // connect the two node of path
         result.connect(iter->first, iter->second);

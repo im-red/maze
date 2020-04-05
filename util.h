@@ -47,7 +47,12 @@ public:
 
     void stop();
 
-public:
+private:
+    static std::string prefix();
+    static void log(const std::string &s);
+
+private:
+    static int m_aliveCount;
     bool m_stopped;
     int64_t m_startTimeInNs;
     std::string m_tag;

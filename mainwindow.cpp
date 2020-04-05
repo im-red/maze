@@ -31,6 +31,7 @@
 #include "wallfollower.h"
 #include "astar.h"
 #include "visualizationdialog.h"
+#include "util.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -66,6 +67,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_buttonGenerate_clicked()
 {
+    StopWatch sw(__FUNCTION__);
+
     doGenerate();
     doSolve();
     ui->buttonV->setEnabled(true);
@@ -110,7 +113,7 @@ void MainWindow::initUI()
     foreach (QAction *action, ui->menuSolve->actions())
     {
         m_solveGroup.addAction(action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(on_buttonSolve_clicked()));
+        connect(action, &QAction::triggered, this, &MainWindow::doSolve);
     }
     m_genGroup.setExclusive(true);
 
@@ -127,6 +130,8 @@ void MainWindow::initUI()
 
 void MainWindow::doGenerate()
 {
+    StopWatch sw(__FUNCTION__);
+
     int column = ui->columnSpinBox->value();
     int row = ui->rowSpinBox->value();
 
@@ -151,11 +156,15 @@ void MainWindow::doGenerate()
         m_adjacencyList = div.generate();
     }
 
+    ui->mazeWidget->setAdjacencyList(m_adjacencyList);
+
     updateMazeStat();
 }
 
 void MainWindow::doSolve()
 {
+    StopWatch sw(__FUNCTION__);
+
     if (!m_adjacencyList.valid())
     {
         qInfo() << "adjacency list is invalid";
@@ -201,7 +210,6 @@ void MainWindow::updateMazeStat()
         m_nodeNumLabels[i]->setText(QString::number(stat[i]));
         m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjacencyList.nodeCount())));
     }
-    ui->mazeWidget->setAdjacencyList(m_adjacencyList);
 }
 
 void MainWindow::updateSolutionStat()

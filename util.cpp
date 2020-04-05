@@ -41,12 +41,17 @@ pair<int, int> makeOrderedPair(int a, int b)
     return result;
 }
 
+int StopWatch::m_aliveCount = 0;
+
 StopWatch::StopWatch(const string &tag)
     : m_stopped(false)
     , m_startTimeInNs(0)
     , m_tag(tag)
 {
     m_startTimeInNs = currentNSecsSinceEpoch();
+    m_aliveCount++;
+
+    log(prefix() + " " + m_tag + " begin");
 }
 
 StopWatch::~StopWatch()
@@ -60,14 +65,25 @@ void StopWatch::stop()
     {
         return;
     }
-
     m_stopped = true;
 
     int64_t stopTime = currentNSecsSinceEpoch();
     int64_t elapsed = stopTime - m_startTimeInNs;
-
     double elapsedInMSecs = elapsed / 1000000.0;
-    qDebug() << QString::fromStdString(m_tag) << "cost" << elapsedInMSecs << "ms";
+
+    log(prefix() + " " + m_tag + " const " + to_string(elapsedInMSecs) + " ms");
+
+    m_aliveCount--;
+}
+
+string StopWatch::prefix()
+{
+    return string(static_cast<size_t>(m_aliveCount), '|');
+}
+
+void StopWatch::log(const string &s)
+{
+    qDebug() << s.c_str();
 }
 
 int64_t currentNSecsSinceEpoch()
