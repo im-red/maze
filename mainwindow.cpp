@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_adjacencyList(-1, -1)
     , m_vDialog(new VisualizationDialog)
 {
-    srand(time(nullptr));
+    srand(static_cast<unsigned>(time(nullptr)));
     ui->setupUi(this);
 
     initUI();
@@ -196,7 +196,7 @@ void MainWindow::doSolve()
 void MainWindow::updateMazeStat()
 {
     vector<int> stat = m_adjacencyList.neighborStat();
-    for (int i = 0; i < stat.size(); i++)
+    for (size_t i = 0; i < stat.size(); i++)
     {
         m_nodeNumLabels[i]->setText(QString::number(stat[i]));
         m_nodePercentLabels[i]->setText(QString::number(stat[i] * 100.0 / (m_adjacencyList.nodeCount())));
@@ -207,7 +207,7 @@ void MainWindow::updateMazeStat()
 void MainWindow::updateSolutionStat()
 {
     int total = m_adjacencyList.nodeCount();
-    int num = 0;
+    size_t num = 0;
 
     num = m_solutionList.m_solution.size();
     ui->labelSolutionNode->setText(num ? QString::number(num + 1) : QString("/"));

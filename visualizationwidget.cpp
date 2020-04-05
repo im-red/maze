@@ -108,7 +108,7 @@ void VisualizationWidget::reset()
     update();
 }
 
-void VisualizationWidget::timerEvent(QTimerEvent *event)
+void VisualizationWidget::timerEvent(QTimerEvent *)
 {
     nextFrame();
     update();
@@ -171,8 +171,8 @@ void VisualizationWidget::paintGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(float), m_vertices.data(), GL_DYNAMIC_DRAW);
-    glDrawArrays(GL_LINES, 0, m_vertices.size() / 2);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<long long>(m_vertices.size() * sizeof(float)), m_vertices.data(), GL_DYNAMIC_DRAW);
+    glDrawArrays(GL_LINES, 0, static_cast<int>(m_vertices.size() / 2));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     m_program->release();
 
@@ -180,8 +180,8 @@ void VisualizationWidget::paintGL()
     glBindBuffer(GL_ARRAY_BUFFER, m_negativeVbo);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-    glBufferData(GL_ARRAY_BUFFER, m_negativeVertices.size() * sizeof(float), m_negativeVertices.data(), GL_DYNAMIC_DRAW);
-    glDrawArrays(GL_LINES, 0, m_negativeVertices.size() / 2);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<long long>(m_negativeVertices.size() * sizeof(float)), m_negativeVertices.data(), GL_DYNAMIC_DRAW);
+    glDrawArrays(GL_LINES, 0, static_cast<int>(m_negativeVertices.size() / 2));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     m_negativeProgram->release();
 }
@@ -221,16 +221,16 @@ bool VisualizationWidget::validAdjacencyList() const
 int VisualizationWidget::nextActionSeq()
 {
     int result = m_curActionSeq;
-    if (result == m_gaActions.size())
+    if (result == static_cast<int>(m_gaActions.size()))
     {
         result = 0;
     }
     else
     {
         result += m_step;
-        if (result > m_gaActions.size())
+        if (result > static_cast<int>(m_gaActions.size()))
         {
-            result = m_gaActions.size();
+            result = static_cast<int>(m_gaActions.size());
         }
     }
     return result;
@@ -241,7 +241,7 @@ int VisualizationWidget::prevActionSeq()
     int result = m_curActionSeq;
     if (result == 0)
     {
-        result = m_gaActions.size();
+        result = static_cast<int>(m_gaActions.size());
     }
     else
     {
@@ -275,6 +275,9 @@ void VisualizationWidget::updateVertices(int actionSeq)
     appendLine(X_START + w, Y_START + h, X_START + w, Y_START, m_vertices);
     appendLine(X_START + w, Y_START + h, X_START, Y_START + h, m_vertices);
 
+    assert(actionSeq >= 0);
+    size_t seq = static_cast<size_t>(actionSeq);
+
     if (type == AdjacencyList::BreakWall)
     {
         for (int r = 0; r <= row; r++)
@@ -287,14 +290,14 @@ void VisualizationWidget::updateVertices(int actionSeq)
             float x = c * spacing + X_START;
             appendLine(x, Y_START, x, Y_START + h, m_vertices);
         }
-        for (int i = 0; i < actionSeq; i++)
+        for (size_t i = 0; i < seq; i++)
         {
             breakWall(m_gaActions[i].first, m_gaActions[i].second, spacing);
         }
     }
     else
     {
-        for (int i = 0; i < actionSeq; i++)
+        for (size_t i = 0; i < seq; i++)
         {
             buildWall(m_gaActions[i].first, m_gaActions[i].second, spacing);
         }
@@ -304,13 +307,21 @@ void VisualizationWidget::updateVertices(int actionSeq)
 void VisualizationWidget::breakWall(int i, int j, float spacing)
 {
     QLineF l = wall(i, j, spacing);
-    appendLine(l.x1(), l.y1(), l.x2(), l.y2(), m_negativeVertices);
+    appendLine(static_cast<float>(l.x1()),
+               static_cast<float>(l.y1()),
+               static_cast<float>(l.x2()),
+               static_cast<float>(l.y2()),
+               m_negativeVertices);
 }
 
 void VisualizationWidget::buildWall(int i, int j, float spacing)
 {
     QLineF l = wall(i, j, spacing);
-    appendLine(l.x1(), l.y1(), l.x2(), l.y2(), m_vertices);
+    appendLine(static_cast<float>(l.x1()),
+               static_cast<float>(l.y1()),
+               static_cast<float>(l.x2()),
+               static_cast<float>(l.y2()),
+               m_vertices);
 }
 
 QLineF VisualizationWidget::wall(int i, int j, float spacing)
@@ -338,7 +349,8 @@ QLineF VisualizationWidget::wall(int i, int j, float spacing)
         x1 = X_START + (iColumn + 1) * spacing - POINT_SIZE;
         y1 = y0;
     }
-    return QLineF(x0, y0, x1, y1);
+    return QLineF(static_cast<double>(x0), static_cast<double>(y0),
+                  static_cast<double>(x1), static_cast<double>(y1));
 }
 
 void VisualizationWidget::appendVertex(float x, float y, vector<float> &vertices)

@@ -32,8 +32,8 @@ using namespace std;
 AdjacencyList::AdjacencyList(int row, int column)
     : m_row(row)
     , m_column(column)
-    , m_index2neighbor(m_row * m_column)
-    , m_index2surround(m_row * m_column)
+    , m_index2neighbor(static_cast<size_t>(m_row * m_column))
+    , m_index2surround(static_cast<size_t>(m_row * m_column))
     , m_gaType(BreakWall)
 
 {
@@ -55,19 +55,19 @@ void AdjacencyList::fillSurround()
     {
         if (!(isLeftTop(i) || isRightTop(i) || isTopEdge(i)))
         {
-            m_index2surround[i].push_back(i - m_column);
+            m_index2surround[static_cast<size_t>(i)].push_back(i - m_column);
         }
         if (!(isLeftBottom(i) || isRightBottom(i) || isBottomEdge(i)))
         {
-            m_index2surround[i].push_back(i + m_column);
+            m_index2surround[static_cast<size_t>(i)].push_back(i + m_column);
         }
         if (!(isLeftTop(i) || isLeftBottom(i) || isLeftEdge(i)))
         {
-            m_index2surround[i].push_back(i - 1);
+            m_index2surround[static_cast<size_t>(i)].push_back(i - 1);
         }
         if (!(isRightTop(i) || isRightBottom(i) || isRightEdge(i)))
         {
-            m_index2surround[i].push_back(i + 1);
+            m_index2surround[static_cast<size_t>(i)].push_back(i + 1);
         }
     }
 }
@@ -75,16 +75,16 @@ void AdjacencyList::fillSurround()
 void AdjacencyList::connect(int i, int j)
 {
     assert(valid() && validIndex(i) && validIndex(j));
-    m_index2neighbor[i].push_back(j);
-    m_index2neighbor[j].push_back(i);
+    m_index2neighbor[static_cast<size_t>(i)].push_back(j);
+    m_index2neighbor[static_cast<size_t>(j)].push_back(i);
     m_gaActions.push_back(makeOrderedPair(i, j));
 }
 
 void AdjacencyList::disconnect(int i, int j)
 {
     assert(valid() && validIndex(i) && validIndex(j));
-    m_index2neighbor[i].erase(find(m_index2neighbor[i].begin(), m_index2neighbor[i].end(), j));
-    m_index2neighbor[j].erase(find(m_index2neighbor[j].begin(), m_index2neighbor[j].end(), i));
+    m_index2neighbor[static_cast<size_t>(i)].erase(find(neighbor(i).begin(), neighbor(i).end(), j));
+    m_index2neighbor[static_cast<size_t>(j)].erase(find(neighbor(j).begin(), neighbor(j).end(), i));
     m_gaActions.push_back(makeOrderedPair(i, j));
 }
 
@@ -167,23 +167,23 @@ vector<int> AdjacencyList::neighborStat() const
 const vector<int> &AdjacencyList::neighbor(int i) const
 {
     assert(validIndex(i));
-    return m_index2neighbor[i];
+    return m_index2neighbor[static_cast<size_t>(i)];
 }
 
 vector<int> &AdjacencyList::neighbor(int i)
 {
     assert(validIndex(i));
-    return m_index2neighbor[i];
+    return m_index2neighbor[static_cast<size_t>(i)];
 }
 
 const vector<int> &AdjacencyList::surround(int i) const
 {
     assert(validIndex(i));
-    return m_index2surround[i];
+    return m_index2surround[static_cast<size_t>(i)];
 }
 
 vector<int> &AdjacencyList::surround(int i)
 {
     assert(validIndex(i));
-    return m_index2surround[i];
+    return m_index2surround[static_cast<size_t>(i)];
 }

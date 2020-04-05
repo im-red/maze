@@ -60,9 +60,9 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
         return;
     }
 
-    static default_random_engine e(time(nullptr));
-    int x = e() % (right - left) + left;
-    int y = e() % (bottom - top) + top;
+    static default_random_engine e(static_cast<unsigned>(time(nullptr)));
+    int x = static_cast<int>(e() % static_cast<unsigned>(right - left)) + left;
+    int y = static_cast<int>(e() % static_cast<unsigned>(bottom - top)) + top;
 
     vector<pair<int, int>> toDisconnect;
 
@@ -86,10 +86,10 @@ void RecursiveDivision::divide(AdjacencyList &list, int left, int top, int right
     int gapPos[4] = {0};
 
     // get the gap position
-    gapPos[0] = e() % (y - top + 1) + top;
-    gapPos[1] = e() % (bottom - y) + y + 1;
-    gapPos[2] = e() % (x - left + 1) + left;
-    gapPos[3] = e() % (right - x) + x + 1;
+    gapPos[0] = static_cast<int>(e() % static_cast<unsigned>(y - top + 1)) + top;
+    gapPos[1] = static_cast<int>(e() % static_cast<unsigned>(bottom - y)) + y + 1;
+    gapPos[2] = static_cast<int>(e() % static_cast<unsigned>(x - left + 1)) + left;
+    gapPos[3] = static_cast<int>(e() % static_cast<unsigned>(right - x)) + x + 1;
 
     for (int i = 0; i <= 3; i++)
     {

@@ -45,19 +45,19 @@ AdjacencyList Prim::generate()
 {
     AdjacencyList result(m_row, m_column);
 
-    vector<bool> linked(m_row * m_column, false);
+    vector<bool> linked(static_cast<size_t>(m_row * m_column), false);
     linked[0] = true;
 
     set<pair<int ,int>> paths;
     paths.insert(pair<int, int>(0, 1));
     paths.insert(pair<int, int>(0, m_column));
 
-    static default_random_engine e(time(nullptr));
+    static default_random_engine e(static_cast<unsigned>(time(nullptr)));
 
     while (!paths.empty())
     {
         // random select a path in paths
-        int pos = e() % paths.size();
+        int pos = static_cast<int>(e() % paths.size());
         auto iter = paths.begin();
         while (pos--)
         {
@@ -69,7 +69,7 @@ AdjacencyList Prim::generate()
 
         // get the node not in linked
         int current = 0;
-        if (!linked[iter->first])
+        if (!linked[static_cast<size_t>(iter->first)])
         {
             current = iter->first;
         }
@@ -79,13 +79,13 @@ AdjacencyList Prim::generate()
         }
 
         // add the node to linked
-        linked[current] = true;
+        linked[static_cast<size_t>(current)] = true;
 
         // add all not accessed path to paths, and delete all invalid path from paths
         for (auto i : result.surround(current))
         {
             pair<int, int> currentPath = makeOrderedPair(i, current);
-            if (!linked[i])
+            if (!linked[static_cast<size_t>(i)])
             {
                 paths.insert(currentPath);
             }

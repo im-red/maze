@@ -27,15 +27,15 @@
 using namespace std;
 
 UnionFind::UnionFind(int n)
-    : m_nodeCount(n)
+    : m_index2parent(static_cast<size_t>(n))
+    , m_index2treeSize(static_cast<size_t>(n))
+    , m_nodeCount(n)
     , m_connectionCount(0)
-    , m_index2parent(n)
-    , m_index2treeSize(n)
 {
     for (int i = 0; i < n; i++)
     {
-        m_index2parent[i] = i;
-        m_index2treeSize[i] = 1;
+        m_index2parent[static_cast<size_t>(i)] = i;
+        m_index2treeSize[static_cast<size_t>(i)] = 1;
     }
 }
 
@@ -53,24 +53,24 @@ void UnionFind::connect(int p, int q)
     {
         return;
     }
-    if (m_index2treeSize[i] < m_index2treeSize[j])
+    if (m_index2treeSize[static_cast<size_t>(i)] < m_index2treeSize[static_cast<size_t>(j)])
     {
-        m_index2parent[i] = j;
-        m_index2treeSize[j] += m_index2treeSize[i];
+        m_index2parent[static_cast<size_t>(i)] = j;
+        m_index2treeSize[static_cast<size_t>(j)] += m_index2treeSize[static_cast<size_t>(i)];
     }
     else
     {
-        m_index2parent[j] = i;
-        m_index2treeSize[i] += m_index2treeSize[j];
+        m_index2parent[static_cast<size_t>(j)] = i;
+        m_index2treeSize[static_cast<size_t>(i)] += m_index2treeSize[static_cast<size_t>(j)];
     }
     m_connectionCount++;
 }
 
 int UnionFind::root(int p)
 {
-    while (p != m_index2parent[p])
+    while (p != m_index2parent[static_cast<size_t>(p)])
     {
-        p = m_index2parent[p];
+        p = m_index2parent[static_cast<size_t>(p)];
     }
     return p;
 }

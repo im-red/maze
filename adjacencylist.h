@@ -62,7 +62,7 @@ public:
     std::vector<int> neighborStat() const;
 
     GenerationActionType generationActionType() const { return m_gaType; }
-    int generationActionCount() const { return m_gaActions.size(); }
+    int generationActionCount() const { return static_cast<int>(m_gaActions.size()); }
     std::vector<std::pair<int, int>> generationActions() const { return m_gaActions; }
 
 private:

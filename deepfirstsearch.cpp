@@ -47,9 +47,9 @@ AdjacencyList DeepFirstSearch::generate()
 
     AdjacencyList result(m_row, m_column);
 
-    vector<int> color(m_row * m_column, White);
+    vector<int> color(static_cast<size_t>(m_row * m_column), White);
     vector<int> current;
-    current.reserve(m_row * m_column);
+    current.reserve(static_cast<size_t>(m_row * m_column));
 
     color[0] = Gray;
     current.push_back(0);
@@ -63,9 +63,9 @@ AdjacencyList DeepFirstSearch::generate()
 
         for (; iter != result.surround(last).cend(); iter++)
         {
-            if (color[*iter] == White)
+            if (color[static_cast<size_t>(*iter)] == White)
             {
-                color[*iter] = Gray;
+                color[static_cast<size_t>(*iter)] = Gray;
                 result.connect(last, *iter);
                 current.push_back(*iter);
                 break;
@@ -76,7 +76,7 @@ AdjacencyList DeepFirstSearch::generate()
         if (iter == result.surround(last).cend())
         {
             current.pop_back();
-            color[last] = Black;
+            color[static_cast<size_t>(last)] = Black;
         }
     }
 

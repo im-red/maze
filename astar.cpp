@@ -60,22 +60,19 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
     case Zero:
         hFunc = zeroDistance;
         break;
-    default:
-        assert(false);
-        break;
     }
 
     MutablePriorityQueue<AStarNode> openQueue([](const AStarNode &p, const AStarNode &q) { return p.m_iF < q.m_iF; });
     set<int> closeSet;
     set<int> openSet;
 
-    vector<int> parent(row * column, -1);
-    vector<MutablePriorityQueue<AStarNode>::handle_type> handleVector(row * column);
+    vector<int> parent(static_cast<size_t>(row * column), -1);
+    vector<MutablePriorityQueue<AStarNode>::handle_type> handleVector(static_cast<size_t>(row * column));
 
     const int endIndex = row * column - 1;
     const int beginIndex = 0;
     AStarNode start(beginIndex);
-    handleVector[start.m_iId] = openQueue.push(start);
+    handleVector[static_cast<size_t>(start.m_iId)] = openQueue.push(start);
     openSet.insert(start.m_iId);
 
     SolutionList solution;
@@ -92,11 +89,11 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
             // if we found endIndex, it's end
             if (neighbor == endIndex)
             {
-                parent[neighbor] = currentNode.m_iId;
+                parent[static_cast<size_t>(neighbor)] = currentNode.m_iId;
                 // collect the path from endIndex to beginIndex
-                for (int i = endIndex; i != beginIndex; i = parent[i])
+                for (int i = endIndex; i != beginIndex; i = parent[static_cast<size_t>(i)])
                 {
-                    solution.m_solution.push_back(pair<int, int>(i, parent[i]));
+                    solution.m_solution.push_back(pair<int, int>(i, parent[static_cast<size_t>(i)]));
                 }
                 return solution;
             }
@@ -113,23 +110,23 @@ SolutionList AStar::solve(const AdjacencyList &adjList)
                 toInsert.m_iG = currentNode.m_iG + 1;
                 toInsert.m_iH = hFunc(neighbor, endIndex, column);
                 toInsert.m_iF = toInsert.m_iG + toInsert.m_iH;
-                handleVector[neighbor] = openQueue.push(toInsert);
+                handleVector[static_cast<size_t>(neighbor)] = openQueue.push(toInsert);
                 openSet.insert(neighbor);
 
                 // set the parent
-                parent[neighbor] = currentNode.m_iId;
+                parent[static_cast<size_t>(neighbor)] = currentNode.m_iId;
             }
             else // the neighbor is already in open set
             {
-                AStarNode neighborNode = openQueue.value(handleVector[neighbor]);
+                AStarNode neighborNode = openQueue.value(handleVector[static_cast<size_t>(neighbor)]);
                 int newG = currentNode.m_iG + 1;
                 // if neighborNode has a better parent(a less G value), reparent and update it
                 if (newG < neighborNode.m_iG)
                 {
                     neighborNode.m_iG = newG;
                     neighborNode.m_iF = neighborNode.m_iH + newG;
-                    openQueue.update(handleVector[neighbor], neighborNode);
-                    parent[neighbor] = currentNode.m_iId;
+                    openQueue.update(handleVector[static_cast<size_t>(neighbor)], neighborNode);
+                    parent[static_cast<size_t>(neighbor)] = currentNode.m_iId;
                 }
             }
         }
@@ -156,7 +153,7 @@ int AStar::euclidianDistance(int p, int q, int width)
     int x2 = q % width;
     int y2 = q / width;
 
-    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    return static_cast<int>(sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
 }
 
 int AStar::zeroDistance(int p, int q, int width)
