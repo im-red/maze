@@ -137,12 +137,22 @@ void MazeWidget::clearImage(QImage &image)
     image.fill(Qt::transparent);
 }
 
+void MazeWidget::drawVertex(QPainter &painter, int p)
+{
+    int x = p % m_adjacencyList.column();
+    int y = p / m_adjacencyList.column();
+
+    painter.drawEllipse(QRectF((x + 0.5) * m_spacing - 1.5, (y + 0.5) * m_spacing - 1.5,
+                               3, 3));
+}
+
 void MazeWidget::drawEdge(QPainter &painter, int p, int q)
 {
-    int x1 = p % m_adjacencyList.column();
-    int y1 = p / m_adjacencyList.column();
-    int x2 = q % m_adjacencyList.column();
-    int y2 = q / m_adjacencyList.column();
+    int column = m_adjacencyList.column();
+    int x1 = p % column;
+    int y1 = p / column;
+    int x2 = q % column;
+    int y2 = q / column;
 
     painter.drawLine(QPointF((x1 + 0.5) * m_spacing, (y1 + 0.5) * m_spacing), QPointF((x2 + 0.5) * m_spacing, (y2 + 0.5) * m_spacing));
 }
@@ -173,9 +183,11 @@ void MazeWidget::generatePath()
     pen.setBrush(Qt::SolidPattern);
     pen.setColor(Qt::black);
     painter.setPen(pen);
+    painter.setBrush(Qt::SolidPattern);
 
     for (int i = 0; i < row * column; i++)
     {
+        drawVertex(painter, i);
         if (count(m_adjacencyList.neighbor(i).begin(), m_adjacencyList.neighbor(i).end(), i + 1) == 1)
         {
             drawEdge(painter, i, i + 1);

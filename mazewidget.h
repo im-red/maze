@@ -61,6 +61,7 @@ protected:
 
 private:
     void clearImage(QImage &image);
+    void drawVertex(QPainter &painter, int p);
     void drawEdge(QPainter &painter, int p, int q);
     void adjustSpacing(int row, int column);
 
