@@ -19,24 +19,46 @@ Maze solving algorithms include:
 
 They are all from https://en.wikipedia.org/wiki/Maze_solving_algorithm
 
+## Visualization of generation process
+
+DFS:
+
+![DFS](screenshots/dfs.gif)
+
+Kruskal:
+
+![Kruskal](screenshots/kruskal.gif)
+
+Prim:
+
+![Prim](screenshots/prim.gif)
+
+Recursive division:
+
+![Recursive division](screenshots/recursive_division.gif)
+
 ## Screenshots
 
 Maze:
 
-![Maze](screenshots/1.png)
+![Maze](screenshots/maze.png)
 
 Solution:
 
-![Solution](screenshots/2.png)
+![Solution](screenshots/solution.png)
 
 Generation algorithm:
 
-![Generation algorithm](screenshots/3.png)
+![Generation algorithm](screenshots/generation.png)
 
 Solving algorithm:
 
-![Solving algorithm](screenshots/4.png)
+![Solving algorithm](screenshots/solving.png)
 
 Save:
 
-![Save](screenshots/5.png)
+![Save](screenshots/save.png)
+
+Visualization of generation:
+
+![Visualization of generation](screenshots/visualization_of_generation.png)
